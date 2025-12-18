@@ -10,6 +10,13 @@ type ReviewItemProps = {
   date: string;
 }
 
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+}
+
 function ReviewItem({user, rating, comment, date}: ReviewItemProps): JSX.Element {
   return (
     <li className="reviews__item">
@@ -26,7 +33,7 @@ function ReviewItem({user, rating, comment, date}: ReviewItemProps): JSX.Element
         <p className="reviews__text">
           {comment}
         </p>
-        <time className="reviews__time" dateTime={date}>{date}</time>
+        <time className="reviews__time" dateTime={date}>{formatDate(date)}</time>
       </div>
     </li>
   );
