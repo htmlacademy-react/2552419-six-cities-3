@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../components/header/header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
@@ -12,8 +13,10 @@ import Reviews from '../../components/reviews/reviews';
 import ReviewForm from '../../components/review-form/review-form';
 import Map from '../../components/map/map';
 import PlaceCard from '../../components/place-card/place-card';
+import { PlaceCardVariant } from '../../types/place-card-variant';
 import { Offer } from '../../types/offer';
 import { MOCK_REVIEWS } from '../../mocks/reviews';
+import { NEARBY_OFFERS_COUNT, DEFAULT_BEDROOMS_COUNT, DEFAULT_MAX_ADULTS_COUNT, DEFAULT_FAVORITE_COUNT, PREMIUM_OFFER_INDEX } from '../../constants';
 
 const GALLERY_IMAGES = [
   'img/room.jpg',
@@ -41,10 +44,10 @@ type OfferPageProps = {
   offers: Offer[];
 }
 
-function OfferPage({offers}: OfferPageProps): JSX.Element {
+const OfferPage: FC<OfferPageProps> = ({offers}) => {
   const { id } = useParams();
   const currentOffer = offers.find((offer) => offer.id === id);
-  const nearbyOffers = offers.filter((offer) => offer.id !== id).slice(0, 3);
+  const nearbyOffers = offers.filter((offer) => offer.id !== id).slice(0, NEARBY_OFFERS_COUNT);
   const mapOffers = currentOffer ? [currentOffer, ...nearbyOffers] : nearbyOffers;
 
   if (!currentOffer) {
@@ -65,7 +68,7 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
       <Header
         user={{
           email: 'Oliver.conner@gmail.com',
-          favoriteCount: 3,
+          favoriteCount: DEFAULT_FAVORITE_COUNT,
         }}
       />
 
@@ -82,7 +85,7 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
                 <BookmarkButton size="large" isActive={currentOffer.isFavorite} />
               </div>
               <Rating rating={currentOffer.rating} className="offer__rating" showValue />
-              <OfferFeatures type={currentOffer.type} bedrooms={3} maxAdults={4} />
+              <OfferFeatures type={currentOffer.type} bedrooms={DEFAULT_BEDROOMS_COUNT} maxAdults={DEFAULT_MAX_ADULTS_COUNT} />
               <Price value={currentOffer.price} variant="offer" />
               <OfferInside items={INSIDE_ITEMS} />
               <OfferHost
@@ -108,8 +111,8 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
                 <PlaceCard
                   key={offer.id}
                   offer={offer}
-                  variant="near-places"
-                  isPremium={index === 2}
+                  variant={PlaceCardVariant.NearPlaces}
+                  isPremium={index === PREMIUM_OFFER_INDEX}
                 />
               ))}
             </div>
@@ -118,6 +121,6 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
       </main>
     </div>
   );
-}
+};
 
 export default OfferPage;

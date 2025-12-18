@@ -1,11 +1,14 @@
+import { FC } from 'react';
+import { PERCENT_PER_STAR } from '../../constants';
+
 type RatingProps = {
   rating: number;
   className?: string;
   showValue?: boolean;
 }
 
-function Rating({rating, className = '', showValue = false}: RatingProps): JSX.Element {
-  const ratingPercent = Math.round(rating * 20);
+const Rating: FC<RatingProps> = ({rating, className = '', showValue = false}) => {
+  const ratingPercent = Math.round(rating * PERCENT_PER_STAR);
 
   return (
     <div className={`rating ${className}`}>
@@ -18,7 +21,7 @@ function Rating({rating, className = '', showValue = false}: RatingProps): JSX.E
       )}
     </div>
   );
-}
+};
 
 export default Rating;
 

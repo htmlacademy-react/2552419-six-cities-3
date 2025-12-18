@@ -1,0 +1,115 @@
+import { City } from './types/offer';
+
+const MAP_ICON_WIDTH = 27;
+const MAP_ICON_HEIGHT = 39;
+const MAP_ICON_ANCHOR_X = 13.5;
+const MAP_ICON_ANCHOR_Y = 39;
+
+const MIN_COMMENT_LENGTH = 50;
+const STAR_ICON_WIDTH = 37;
+const STAR_ICON_HEIGHT = 33;
+const MAX_RATING = 5;
+const RATING_4 = 4;
+const RATING_3 = 3;
+const RATING_2 = 2;
+const MIN_RATING = 1;
+
+const PERCENT_PER_STAR = 20;
+
+const FAVORITES_IMAGE_WIDTH = 150;
+const DEFAULT_IMAGE_WIDTH = 260;
+const FAVORITES_IMAGE_HEIGHT = 110;
+const DEFAULT_IMAGE_HEIGHT = 200;
+
+const LARGE_ICON_WIDTH = 31;
+const SMALL_ICON_WIDTH = 18;
+const LARGE_ICON_HEIGHT = 33;
+const SMALL_ICON_HEIGHT = 19;
+
+const NEARBY_OFFERS_COUNT = 3;
+const DEFAULT_BEDROOMS_COUNT = 3;
+const DEFAULT_MAX_ADULTS_COUNT = 4;
+const PREMIUM_OFFER_INDEX = 2;
+
+const AMSTERDAM_OFFERS_COUNT = 2;
+const FIRST_OFFER_INDEX = 0;
+
+const AVATAR_SIZE = 54;
+const HOST_AVATAR_SIZE = 74;
+
+const LOGO_WIDTH = 81;
+const LOGO_HEIGHT = 41;
+const FOOTER_LOGO_WIDTH = 64;
+const FOOTER_LOGO_HEIGHT = 33;
+
+const ARROW_ICON_WIDTH = 7;
+const ARROW_ICON_HEIGHT = 4;
+
+const DEFAULT_FAVORITE_COUNT = 3;
+const EMPTY_FAVORITE_COUNT = 0;
+
+const OFFERS_COUNT = 312;
+
+const MOCK_OFFER_RATING = 4.8;
+const MOCK_OFFER_PRICE = 120;
+
+export const CITIES: City[] = [
+  { name: 'Paris' },
+  { name: 'Cologne' },
+  { name: 'Brussels' },
+  { name: 'Amsterdam' },
+  { name: 'Hamburg' },
+  { name: 'Dusseldorf' },
+];
+
+export enum AppRoute {
+  Main = '/',
+  Login = '/login',
+  Favorites = '/favorites',
+  Offer = '/offer/:id',
+}
+
+export const getOfferUrl = (id: string): string => `/offer/${id}`;
+
+export {
+  MAP_ICON_WIDTH,
+  MAP_ICON_HEIGHT,
+  MAP_ICON_ANCHOR_X,
+  MAP_ICON_ANCHOR_Y,
+  MIN_COMMENT_LENGTH,
+  STAR_ICON_WIDTH,
+  STAR_ICON_HEIGHT,
+  MAX_RATING,
+  RATING_4,
+  RATING_3,
+  RATING_2,
+  MIN_RATING,
+  PERCENT_PER_STAR,
+  FAVORITES_IMAGE_WIDTH,
+  DEFAULT_IMAGE_WIDTH,
+  FAVORITES_IMAGE_HEIGHT,
+  DEFAULT_IMAGE_HEIGHT,
+  LARGE_ICON_WIDTH,
+  SMALL_ICON_WIDTH,
+  LARGE_ICON_HEIGHT,
+  SMALL_ICON_HEIGHT,
+  NEARBY_OFFERS_COUNT,
+  DEFAULT_BEDROOMS_COUNT,
+  DEFAULT_MAX_ADULTS_COUNT,
+  PREMIUM_OFFER_INDEX,
+  AMSTERDAM_OFFERS_COUNT,
+  FIRST_OFFER_INDEX,
+  AVATAR_SIZE,
+  HOST_AVATAR_SIZE,
+  LOGO_WIDTH,
+  LOGO_HEIGHT,
+  FOOTER_LOGO_WIDTH,
+  FOOTER_LOGO_HEIGHT,
+  ARROW_ICON_WIDTH,
+  ARROW_ICON_HEIGHT,
+  DEFAULT_FAVORITE_COUNT,
+  EMPTY_FAVORITE_COUNT,
+  OFFERS_COUNT,
+  MOCK_OFFER_RATING,
+  MOCK_OFFER_PRICE,
+};

@@ -1,13 +1,13 @@
+import { FC, ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
+import { AppRoute } from '../../constants';
 
 type PrivateRouteProps = {
-  children: JSX.Element;
+  children: ReactElement;
   isAuthorized: boolean;
 }
 
-function PrivateRoute({children, isAuthorized}: PrivateRouteProps): JSX.Element {
-  return isAuthorized ? children : <Navigate to="/login" />;
-}
+const PrivateRoute: FC<PrivateRouteProps> = ({children, isAuthorized}) => (isAuthorized ? children : <Navigate to={AppRoute.Login} />);
 
 export default PrivateRoute;
 

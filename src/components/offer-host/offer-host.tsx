@@ -1,3 +1,6 @@
+import { FC } from 'react';
+import { HOST_AVATAR_SIZE } from '../../constants';
+
 type OfferHostProps = {
   name: string;
   avatarUrl: string;
@@ -5,13 +8,15 @@ type OfferHostProps = {
   description: string[];
 }
 
-function OfferHost({name, avatarUrl, isPro = false, description}: OfferHostProps): JSX.Element {
+const OfferHost: FC<OfferHostProps> = ({name, avatarUrl, isPro = false, description}) => {
+  const proClass = isPro ? 'offer__avatar-wrapper--pro' : '';
+
   return (
     <div className="offer__host">
       <h2 className="offer__host-title">Meet the host</h2>
       <div className="offer__host-user user">
-        <div className={`offer__avatar-wrapper user__avatar-wrapper ${isPro ? 'offer__avatar-wrapper--pro' : ''}`}>
-          <img className="offer__avatar user__avatar" src={avatarUrl} width="74" height="74" alt="Host avatar" />
+        <div className={`offer__avatar-wrapper user__avatar-wrapper ${proClass}`}>
+          <img className="offer__avatar user__avatar" src={avatarUrl} width={HOST_AVATAR_SIZE} height={HOST_AVATAR_SIZE} alt="Host avatar" />
         </div>
         <span className="offer__user-name">
           {name}
@@ -23,15 +28,16 @@ function OfferHost({name, avatarUrl, isPro = false, description}: OfferHostProps
         )}
       </div>
       <div className="offer__description">
-        {description.map((text) => (
-          <p key={text} className="offer__text">
+        {description.map((text, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <p key={index} className="offer__text">
             {text}
           </p>
         ))}
       </div>
     </div>
   );
-}
+};
 
 export default OfferHost;
 

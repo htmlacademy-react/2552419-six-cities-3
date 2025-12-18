@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { AppRoute } from '../../constants';
 
 const styles = {
   page: {
@@ -148,7 +149,9 @@ const styles = {
 
 const PARTICLES_COUNT = 20;
 
-function NotFoundPage(): JSX.Element {
+import { FC } from 'react';
+
+const NotFoundPage: FC = () => {
   const particles = Array.from({ length: PARTICLES_COUNT }, (_, i) => ({
     id: `particle-${i}`,
     left: Math.random() * 100,
@@ -248,7 +251,7 @@ function NotFoundPage(): JSX.Element {
       </div>
 
       <header style={styles.header}>
-        <Link to="/" style={styles.logoLink} className="not-found-logo">
+        <Link to={AppRoute.Main} style={styles.logoLink} className="not-found-logo">
           <img src="img/logo.svg" alt="6 cities logo" style={styles.logo} />
         </Link>
       </header>
@@ -256,7 +259,7 @@ function NotFoundPage(): JSX.Element {
       <div style={styles.content}>
         <h1 style={styles.title}>404</h1>
         <p style={styles.text}>Page Not Found</p>
-        <Link to="/" style={styles.link} className="not-found-link">
+        <Link to={AppRoute.Main} style={styles.link} className="not-found-link">
           Go Home
         </Link>
       </div>
@@ -266,6 +269,6 @@ function NotFoundPage(): JSX.Element {
       </footer>
     </div>
   );
-}
+};
 
 export default NotFoundPage;

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import Header from '../../components/header/header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import PremiumMark from '../../components/premium-mark/premium-mark';
@@ -10,7 +11,9 @@ import OfferHost from '../../components/offer-host/offer-host';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
 import PlaceCard from '../../components/place-card/place-card';
+import { PlaceCardVariant } from '../../types/place-card-variant';
 import { Offer } from '../../types/offer';
+import { DEFAULT_BEDROOMS_COUNT, DEFAULT_MAX_ADULTS_COUNT, PREMIUM_OFFER_INDEX, MOCK_OFFER_RATING, MOCK_OFFER_PRICE } from '../../constants';
 
 const GALLERY_IMAGES = [
   'img/room.jpg',
@@ -92,59 +95,57 @@ const NEARBY_OFFERS: Offer[] = [
   },
 ];
 
-function OfferNotLoggedPage(): JSX.Element {
-  return (
-    <div className="page">
-      <Header />
+const OfferNotLoggedPage: FC = () => (
+  <div className="page">
+    <Header />
 
-      <main className="page__main page__main--offer">
-        <section className="offer">
-          <OfferGallery images={GALLERY_IMAGES} />
-          <div className="offer__container container">
-            <div className="offer__wrapper">
-              <PremiumMark variant="offer" />
-              <div className="offer__name-wrapper">
-                <h1 className="offer__name">
-                  Beautiful &amp; luxurious studio at great location
-                </h1>
-                <BookmarkButton size="large" />
-              </div>
-              <Rating rating={4.8} className="offer__rating" showValue />
-              <OfferFeatures type="Apartment" bedrooms={3} maxAdults={4} />
-              <Price value={120} variant="offer" />
-              <OfferInside items={INSIDE_ITEMS} />
-              <OfferHost
-                name="Angelina"
-                avatarUrl="img/avatar-angelina.jpg"
-                isPro
-                description={[
-                  'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.',
-                  'An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.',
-                ]}
-              />
-              <Reviews reviews={REVIEWS_DATA} />
+    <main className="page__main page__main--offer">
+      <section className="offer">
+        <OfferGallery images={GALLERY_IMAGES} />
+        <div className="offer__container container">
+          <div className="offer__wrapper">
+            <PremiumMark variant="offer" />
+            <div className="offer__name-wrapper">
+              <h1 className="offer__name">
+                Beautiful &amp; luxurious studio at great location
+              </h1>
+              <BookmarkButton size="large" />
             </div>
+            <Rating rating={MOCK_OFFER_RATING} className="offer__rating" showValue />
+            <OfferFeatures type="Apartment" bedrooms={DEFAULT_BEDROOMS_COUNT} maxAdults={DEFAULT_MAX_ADULTS_COUNT} />
+            <Price value={MOCK_OFFER_PRICE} variant="offer" />
+            <OfferInside items={INSIDE_ITEMS} />
+            <OfferHost
+              name="Angelina"
+              avatarUrl="img/avatar-angelina.jpg"
+              isPro
+              description={[
+                'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.',
+                'An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.',
+              ]}
+            />
+            <Reviews reviews={REVIEWS_DATA} />
           </div>
-          <Map offers={NEARBY_OFFERS} className="offer__map" />
-        </section>
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <div className="near-places__list places__list">
-              {NEARBY_OFFERS.map((offer, index) => (
-                <PlaceCard
-                  key={offer.id}
-                  offer={offer}
-                  variant="near-places"
-                  isPremium={index === 2}
-                />
-              ))}
-            </div>
-          </section>
         </div>
-      </main>
-    </div>
-  );
-}
+        <Map offers={NEARBY_OFFERS} className="offer__map" />
+      </section>
+      <div className="container">
+        <section className="near-places places">
+          <h2 className="near-places__title">Other places in the neighbourhood</h2>
+          <div className="near-places__list places__list">
+            {NEARBY_OFFERS.map((offer, index) => (
+              <PlaceCard
+                key={offer.id}
+                offer={offer}
+                variant={PlaceCardVariant.NearPlaces}
+                isPremium={index === PREMIUM_OFFER_INDEX}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+);
 
 export default OfferNotLoggedPage;

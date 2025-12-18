@@ -1,23 +1,26 @@
+import { FC } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import PlaceCard from '../../components/place-card/place-card';
+import { PlaceCardVariant } from '../../types/place-card-variant';
 import { Offer } from '../../types/offer';
+import { AMSTERDAM_OFFERS_COUNT, DEFAULT_FAVORITE_COUNT, FIRST_OFFER_INDEX } from '../../constants';
 
 type FavoritesPageProps = {
   offers: Offer[];
 }
 
-function FavoritesPage({offers}: FavoritesPageProps): JSX.Element {
+const FavoritesPage: FC<FavoritesPageProps> = ({offers}) => {
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
-  const amsterdamOffers = favoriteOffers.slice(0, 2);
-  const cologneOffers = favoriteOffers.slice(2);
+  const amsterdamOffers = favoriteOffers.slice(0, AMSTERDAM_OFFERS_COUNT);
+  const cologneOffers = favoriteOffers.slice(AMSTERDAM_OFFERS_COUNT);
 
   return (
     <div className="page">
       <Header
         user={{
           email: 'Oliver.conner@gmail.com',
-          favoriteCount: 3,
+          favoriteCount: DEFAULT_FAVORITE_COUNT,
         }}
       />
 
@@ -39,8 +42,8 @@ function FavoritesPage({offers}: FavoritesPageProps): JSX.Element {
                     <PlaceCard
                       key={offer.id}
                       offer={offer}
-                      variant="favorites"
-                      isPremium={index === 0}
+                      variant={PlaceCardVariant.Favorites}
+                      isPremium={index === FIRST_OFFER_INDEX}
                     />
                   ))}
                 </div>
@@ -59,7 +62,7 @@ function FavoritesPage({offers}: FavoritesPageProps): JSX.Element {
                     <PlaceCard
                       key={offer.id}
                       offer={offer}
-                      variant="favorites"
+                      variant={PlaceCardVariant.Favorites}
                     />
                   ))}
                 </div>
@@ -71,6 +74,6 @@ function FavoritesPage({offers}: FavoritesPageProps): JSX.Element {
       <Footer />
     </div>
   );
-}
+};
 
 export default FavoritesPage;
