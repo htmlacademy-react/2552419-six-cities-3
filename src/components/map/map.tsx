@@ -2,25 +2,13 @@ import { useEffect, useRef, FC } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Offer } from '../../types/offer';
-import { MAP_ICON_WIDTH, MAP_ICON_HEIGHT, MAP_ICON_ANCHOR_X, MAP_ICON_ANCHOR_Y } from '../../constants';
+import { DEFAULT_ICON, ACTIVE_ICON } from '../../constants';
 
 type MapProps = {
   offers: Offer[];
   selectedOfferId?: string;
   className?: string;
 }
-
-const DEFAULT_ICON = L.icon({
-  iconUrl: 'img/pin.svg',
-  iconSize: [MAP_ICON_WIDTH, MAP_ICON_HEIGHT],
-  iconAnchor: [MAP_ICON_ANCHOR_X, MAP_ICON_ANCHOR_Y],
-});
-
-const ACTIVE_ICON = L.icon({
-  iconUrl: 'img/pin-active.svg',
-  iconSize: [MAP_ICON_WIDTH, MAP_ICON_HEIGHT],
-  iconAnchor: [MAP_ICON_ANCHOR_X, MAP_ICON_ANCHOR_Y],
-});
 
 const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
   const mapRef = useRef<HTMLDivElement>(null);

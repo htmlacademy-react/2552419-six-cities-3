@@ -1,23 +1,11 @@
 import { FC } from 'react';
-import { ARROW_ICON_WIDTH, ARROW_ICON_HEIGHT } from '../../constants';
-
-type SortOption = {
-  name: string;
-  value: string;
-}
+import { ARROW_ICON_WIDTH, ARROW_ICON_HEIGHT, DEFAULT_SORT_OPTIONS, SortOption } from '../../constants';
 
 type SortOptionsProps = {
   currentSort?: string;
   isOpen?: boolean;
   options?: SortOption[];
 }
-
-const DEFAULT_SORT_OPTIONS: SortOption[] = [
-  { name: 'Popular', value: 'popular' },
-  { name: 'Price: low to high', value: 'price-low' },
-  { name: 'Price: high to low', value: 'price-high' },
-  { name: 'Top rated first', value: 'rating' },
-];
 
 const SortOptions: FC<SortOptionsProps> = ({currentSort = 'Popular', isOpen = false, options = DEFAULT_SORT_OPTIONS}) => (
   <form className="places__sorting" action="#" method="get">

@@ -1,17 +1,15 @@
 import { FC, useMemo } from 'react';
 import Header from '../../components/header/header';
 import LocationsList from '../../components/locations-list/locations-list';
-import { DEFAULT_FAVORITE_COUNT, CITIES } from '../../constants';
-
-const ACTIVE_CITY_NAME = 'Dusseldorf';
+import { DEFAULT_FAVORITE_COUNT, CITIES, EMPTY_PAGE_ACTIVE_CITY_NAME } from '../../constants';
 
 const MainEmptyPage: FC = () => {
   const citiesWithActive = useMemo(() => CITIES.map((city) => ({
     ...city,
-    isActive: city.name === ACTIVE_CITY_NAME,
+    isActive: city.name === EMPTY_PAGE_ACTIVE_CITY_NAME,
   })), []);
 
-  const activeCity = ACTIVE_CITY_NAME;
+  const activeCity = EMPTY_PAGE_ACTIVE_CITY_NAME;
 
   return (
     <div className="page page--gray page--main">

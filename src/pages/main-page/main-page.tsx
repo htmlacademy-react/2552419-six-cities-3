@@ -4,9 +4,7 @@ import LocationsList from '../../components/locations-list/locations-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
 import { Offer } from '../../types/offer';
-import { DEFAULT_FAVORITE_COUNT, CITIES } from '../../constants';
-
-const ACTIVE_CITY_NAME = 'Amsterdam';
+import { DEFAULT_FAVORITE_COUNT, CITIES, DEFAULT_ACTIVE_CITY_NAME } from '../../constants';
 
 type MainPageProps = {
   offersCount: number;
@@ -16,10 +14,10 @@ type MainPageProps = {
 const MainPage: FC<MainPageProps> = ({offersCount, offers}) => {
   const citiesWithActive = useMemo(() => CITIES.map((city) => ({
     ...city,
-    isActive: city.name === ACTIVE_CITY_NAME,
+    isActive: city.name === DEFAULT_ACTIVE_CITY_NAME,
   })), []);
 
-  const activeCity = ACTIVE_CITY_NAME;
+  const activeCity = DEFAULT_ACTIVE_CITY_NAME;
   const [selectedOfferId, setSelectedOfferId] = useState<string | undefined>();
 
   const handleCardHover = useCallback((offerId: string | undefined) => {

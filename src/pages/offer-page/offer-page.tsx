@@ -16,29 +16,7 @@ import PlaceCard from '../../components/place-card/place-card';
 import { PlaceCardVariant } from '../../types/place-card-variant';
 import { Offer } from '../../types/offer';
 import { MOCK_REVIEWS } from '../../mocks/reviews';
-import { NEARBY_OFFERS_COUNT, DEFAULT_BEDROOMS_COUNT, DEFAULT_MAX_ADULTS_COUNT, DEFAULT_FAVORITE_COUNT, PREMIUM_OFFER_INDEX } from '../../constants';
-
-const GALLERY_IMAGES = [
-  'img/room.jpg',
-  'img/apartment-01.jpg',
-  'img/apartment-02.jpg',
-  'img/apartment-03.jpg',
-  'img/studio-01.jpg',
-  'img/apartment-01.jpg',
-];
-
-const INSIDE_ITEMS = [
-  'Wi-Fi',
-  'Washing machine',
-  'Towels',
-  'Heating',
-  'Coffee machine',
-  'Baby seat',
-  'Kitchen',
-  'Dishwasher',
-  'Cable TV',
-  'Fridge',
-];
+import { NEARBY_OFFERS_COUNT, DEFAULT_BEDROOMS_COUNT, DEFAULT_MAX_ADULTS_COUNT, DEFAULT_FAVORITE_COUNT, PREMIUM_OFFER_INDEX, GALLERY_IMAGES, INSIDE_ITEMS } from '../../constants';
 
 type OfferPageProps = {
   offers: Offer[];
