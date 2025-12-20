@@ -4,12 +4,12 @@ import LocationsList from '../../components/locations-list/locations-list';
 import { FAVORITE_COUNT, CITIES, CITY_NAME, MOCK_EMAIL } from '../../constants';
 
 const MainEmptyPage: FC = () => {
+  const activeCity = useMemo(() => CITIES.find((city) => city.name === CITY_NAME.EMPTY_PAGE_ACTIVE), []);
+
   const citiesWithActive = useMemo(() => CITIES.map((city) => ({
     ...city,
     isActive: city.name === CITY_NAME.EMPTY_PAGE_ACTIVE,
   })), []);
-
-  const activeCity = CITY_NAME.EMPTY_PAGE_ACTIVE;
 
   return (
     <div className="page page--gray page--main">
@@ -28,7 +28,7 @@ const MainEmptyPage: FC = () => {
             <section className="cities__no-places">
               <div className="cities__status-wrapper tabs__content">
                 <b className="cities__status">No places to stay available</b>
-                <p className="cities__status-description">We could not find any property available at the moment in {activeCity}</p>
+                <p className="cities__status-description">We could not find any property available at the moment in {activeCity?.name}</p>
               </div>
             </section>
             <div className="cities__right-section"></div>
