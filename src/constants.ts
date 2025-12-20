@@ -116,6 +116,7 @@ const NEARBY_OFFERS: Offer[] = [
     previewImage: 'img/room.jpg',
     rating: 4.0,
     isFavorite: true,
+    city: { name: 'Amsterdam' },
     location: {
       latitude: 52.37454,
       longitude: 4.897976,
@@ -130,6 +131,7 @@ const NEARBY_OFFERS: Offer[] = [
     previewImage: 'img/apartment-02.jpg',
     rating: 4.0,
     isFavorite: false,
+    city: { name: 'Amsterdam' },
     location: {
       latitude: 52.35054,
       longitude: 4.908976,
@@ -144,6 +146,7 @@ const NEARBY_OFFERS: Offer[] = [
     previewImage: 'img/apartment-03.jpg',
     rating: 5.0,
     isFavorite: false,
+    city: { name: 'Amsterdam' },
     location: {
       latitude: 52.39054,
       longitude: 4.853096,

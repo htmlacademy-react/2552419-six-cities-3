@@ -17,6 +17,7 @@ export type Offer = {
   previewImage: string;
   rating: number;
   isFavorite?: boolean;
+  city: City;
   location: Location;
 }
 

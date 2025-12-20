@@ -1,23 +1,25 @@
 import { useState, useCallback, FC, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import Header from '../../components/header/header';
 import LocationsList from '../../components/locations-list/locations-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
-import { Offer } from '../../types/offer';
-import { DEFAULT_FAVORITE_COUNT, CITIES, DEFAULT_ACTIVE_CITY_NAME } from '../../constants';
+import { DEFAULT_FAVORITE_COUNT, CITIES } from '../../constants';
+import type { RootState } from '../../store';
 
-type MainPageProps = {
-  offersCount: number;
-  offers: Offer[];
-}
+const MainPage: FC = () => {
+  const city = useSelector((state: RootState) => state.data.city);
+  const allOffers = useSelector((state: RootState) => state.data.offers);
 
-const MainPage: FC<MainPageProps> = ({offersCount, offers}) => {
-  const citiesWithActive = useMemo(() => CITIES.map((city) => ({
-    ...city,
-    isActive: city.name === DEFAULT_ACTIVE_CITY_NAME,
-  })), []);
+  const filteredOffers = useMemo(() => {
+    return allOffers.filter((offer) => offer.city.name === city);
+  }, [allOffers, city]);
 
-  const activeCity = DEFAULT_ACTIVE_CITY_NAME;
+  const citiesWithActive = useMemo(() => CITIES.map((cityItem) => ({
+    ...cityItem,
+    isActive: cityItem.name === city,
+  })), [city]);
+
   const [selectedOfferId, setSelectedOfferId] = useState<string | undefined>();
 
   const handleCardHover = useCallback((offerId: string | undefined) => {
@@ -35,19 +37,19 @@ const MainPage: FC<MainPageProps> = ({offersCount, offers}) => {
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <LocationsList cities={citiesWithActive} activeCity={activeCity} />
+        <LocationsList cities={citiesWithActive} activeCity={city} />
         <div className="cities">
           <div className="cities__places-container container">
             <PlacesList
-              offers={offers}
-              offersCount={offersCount}
-              cityName={activeCity}
+              offers={filteredOffers}
+              offersCount={filteredOffers.length}
+              cityName={city}
               currentSort="Popular"
               isSortOpen
               onCardHover={handleCardHover}
             />
             <div className="cities__right-section">
-              <Map offers={offers} selectedOfferId={selectedOfferId} className="cities__map" />
+              <Map offers={filteredOffers} selectedOfferId={selectedOfferId} className="cities__map" />
             </div>
           </div>
         </div>
