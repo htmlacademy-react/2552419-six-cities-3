@@ -1,6 +1,5 @@
 import { FC, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import Header from '../../components/header/header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import PremiumMark from '../../components/premium-mark/premium-mark';
@@ -18,10 +17,11 @@ import { PlaceCardVariant } from '../../types/place-card-variant';
 import { MOCK_REVIEWS } from '../../mocks/reviews';
 import { OFFER, FAVORITE_COUNT, MOCK_EMAIL, GALLERY_IMAGES, INSIDE_ITEMS } from '../../constants';
 import { selectOffers } from '../../store/data-slice';
+import { useAppSelector } from '../../store';
 
 const OfferPage: FC = () => {
   const { id } = useParams();
-  const offers = useSelector(selectOffers);
+  const offers = useAppSelector(selectOffers);
   const currentOffer = useMemo(() => offers.find((offer) => offer.id === id), [offers, id]);
   const nearbyOffers = useMemo(() => offers.filter((offer) => offer.id !== id).slice(0, OFFER.NEARBY_COUNT), [offers, id]);
   const mapOffers = useMemo(() => currentOffer ? [currentOffer, ...nearbyOffers] : nearbyOffers, [currentOffer, nearbyOffers]);

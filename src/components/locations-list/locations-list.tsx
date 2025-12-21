@@ -1,7 +1,7 @@
 import { FC, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { City } from '../../types/offer';
 import { changeCity } from '../../store/data-slice';
+import { useActionCreators } from '../../store';
 
 type LocationsListProps = {
   cities: City[];
@@ -35,12 +35,12 @@ const ListItem: FC<LocationsItemProps> = ({city, activeCity, onCityClick}) => {
 };
 
 const LocationsList: FC<LocationsListProps> = ({cities, activeCity}) => {
-  const dispatch = useDispatch();
+  const actions = useActionCreators({ changeCity });
 
   const handleCityClick = useCallback((city: City, evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
-    dispatch(changeCity(city));
-  }, [dispatch]);
+    actions.changeCity(city);
+  }, [actions]);
 
   return (
     <div className="tabs">

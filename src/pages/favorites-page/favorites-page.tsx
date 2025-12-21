@@ -1,14 +1,14 @@
 import { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import PlaceCard from '../../components/place-card/place-card';
 import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER, FAVORITE_COUNT, MOCK_EMAIL } from '../../constants';
 import { selectFavoriteOffers } from '../../store/data-slice';
+import { useAppSelector } from '../../store';
 
 const FavoritesPage: FC = () => {
-  const favoriteOffers = useSelector(selectFavoriteOffers);
+  const favoriteOffers = useAppSelector(selectFavoriteOffers);
   const amsterdamOffers = useMemo(() => favoriteOffers.slice(0, OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
   const cologneOffers = useMemo(() => favoriteOffers.slice(OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
 

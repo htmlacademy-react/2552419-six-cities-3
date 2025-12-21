@@ -1,15 +1,15 @@
 import { useState, useCallback, FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import Header from '../../components/header/header';
 import LocationsList from '../../components/locations-list/locations-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
 import { FAVORITE_COUNT, CITIES, DEFAULT_SORT_OPTIONS, MOCK_EMAIL, SortType } from '../../constants';
 import { selectCity, selectOffers } from '../../store/data-slice';
+import { useAppSelector } from '../../store';
 
 const MainPage: FC = () => {
-  const city = useSelector(selectCity);
-  const allOffers = useSelector(selectOffers);
+  const city = useAppSelector(selectCity);
+  const allOffers = useAppSelector(selectOffers);
 
   const filteredOffers = useMemo(() => allOffers.filter((offer) => offer.city.name === city.name), [allOffers, city]);
 

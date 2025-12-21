@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import MainPage from '../pages/main-page/main-page';
 import LoginPage from '../pages/login-page/login-page';
@@ -10,6 +9,7 @@ import NotFoundPage from '../pages/not-found-page/not-found-page';
 import PrivateRoute from '../components/private-route/private-route';
 import { AppRoute } from '../constants';
 import { loadOffers } from '../store/data-slice';
+import { useActionCreators } from '../store';
 import { MOCK_OFFERS } from '../mocks/offers';
 import type { Offer } from '../types/offer';
 
@@ -18,7 +18,7 @@ type ApiResponse = {
 }
 
 const App: FC = () => {
-  const dispatch = useDispatch();
+  const actions = useActionCreators({ loadOffers });
   const isAuthorized = false;
 
   useEffect(() => {
@@ -27,14 +27,14 @@ const App: FC = () => {
         const response = await axios.get<string>('/api/offers');
         const parsedData = JSON.parse(response.data) as ApiResponse | Offer[];
         const offers = Array.isArray(parsedData) ? parsedData : parsedData.offers;
-        dispatch(loadOffers(offers));
+        actions.loadOffers(offers);
       } catch {
-        dispatch(loadOffers(MOCK_OFFERS));
+        actions.loadOffers(MOCK_OFFERS);
       }
     };
 
     fetchOffers();
-  }, [dispatch]);
+  }, [actions]);
 
   return (
     <BrowserRouter>
