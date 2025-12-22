@@ -15,10 +15,12 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build
         run: |
-          export BASE_PATH="/2552419-six-cities-3/${{ github.event.number }}/"
-          npm install && BASE_PATH="$BASE_PATH" npm run build --if-present
+          npm run build --if-present
           if [[ $(find . -maxdepth 1 -type d -name 'dist') == '' ]]
           then
             cp -r public dist
@@ -28,6 +30,7 @@ jobs:
           mv dist actions_artifacts
         env:
           BASE_PATH: "/2552419-six-cities-3/${{ github.event.number }}/"
+          NODE_ENV: production
 
       - name: Save build
         uses: actions/upload-artifact@v4

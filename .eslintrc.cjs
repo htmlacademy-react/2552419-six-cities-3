@@ -15,6 +15,7 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': 'warn',
   },
+  ignorePatterns: ['src/setupTests.ts'],
   overrides: [
     {
       files: [ '*test*' ],

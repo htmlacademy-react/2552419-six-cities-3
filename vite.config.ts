@@ -23,10 +23,28 @@ export default defineConfig(() => {
         },
       },
       {
-        name: 'generate-404',
+        name: 'fix-assets-paths',
         closeBundle() {
           try {
-            const indexHtml = readFileSync(resolve(__dirname, 'dist/index.html'), 'utf-8');
+            const indexPath = resolve(__dirname, 'dist/index.html');
+            let indexHtml = readFileSync(indexPath, 'utf-8');
+
+            indexHtml = indexHtml.replace(
+              /href="css\/main.css"/g,
+              `href="${base}css/main.css"`
+            );
+
+            indexHtml = indexHtml.replace(
+              /src="([^"]*\/)?assets\/([^"]+)"/g,
+              (_match, _prefix: string | undefined, asset: string) => `src="${base}assets/${asset}"`
+            );
+
+            indexHtml = indexHtml.replace(
+              /href="([^"]*\/)?assets\/([^"]+)"/g,
+              (_match, _prefix: string | undefined, asset: string) => `href="${base}assets/${asset}"`
+            );
+
+            writeFileSync(indexPath, indexHtml);
             writeFileSync(resolve(__dirname, 'dist/404.html'), indexHtml);
           } catch {
             // Ignore errors if dist doesn't exist yet
