@@ -6,6 +6,7 @@ import Map from '../../components/map/map';
 import { FAVORITE_COUNT, CITIES, DEFAULT_SORT_OPTIONS, MOCK_EMAIL, SortType } from '../../constants';
 import { selectCity, selectOffers } from '../../store/data-slice';
 import { useAppSelector } from '../../store';
+import { useBoolean } from '../../hooks/use-boolean';
 
 const MainPage: FC = () => {
   const city = useAppSelector(selectCity);
@@ -20,7 +21,7 @@ const MainPage: FC = () => {
 
   const [selectedOfferId, setSelectedOfferId] = useState<string | undefined>();
   const [currentSort, setCurrentSort] = useState<SortType>(SortType.Popular);
-  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isSortOpen, { toggle: toggleSort, setFalse: closeSort }] = useBoolean(false);
 
   const sortedOffers = useMemo(() => {
     const offersCopy = [...filteredOffers];
@@ -48,12 +49,12 @@ const MainPage: FC = () => {
 
   const handleSortChange = useCallback((sortType: SortType) => {
     setCurrentSort(sortType);
-    setIsSortOpen(false);
-  }, []);
+    closeSort();
+  }, [closeSort]);
 
   const handleSortToggle = useCallback(() => {
-    setIsSortOpen(!isSortOpen);
-  }, [isSortOpen]);
+    toggleSort();
+  }, [toggleSort]);
 
   const getSortName = useCallback((sort: SortType): string => {
     const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === sort);
