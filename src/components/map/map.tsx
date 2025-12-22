@@ -93,7 +93,7 @@ const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
     const longitude = firstOffer.location.longitude;
     const zoom = firstOffer.location.zoom;
     map.setView([latitude, longitude], zoom);
-  }, [offers, selectedOfferId]);
+  }, [offers, selectedOfferId, activeIcon, defaultIcon]);
 
   return <div ref={mapRef} className={`map ${className}`}></div>;
 };

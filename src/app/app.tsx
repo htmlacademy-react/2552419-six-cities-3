@@ -38,7 +38,7 @@ const App: FC = () => {
     fetchOffers();
   }, [actions]);
 
-  const basename = import.meta.env.BASE_URL ? import.meta.env.BASE_URL.replace(/\/$/, '') : '';
+  const basename = import.meta.env.BASE_URL || '';
 
   return (
     <BrowserRouter basename={basename}>
