@@ -24,7 +24,9 @@ const App: FC = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await axios.get<string>('/api/offers');
+        const baseUrl = import.meta.env.BASE_URL || '';
+        const apiPath = baseUrl ? `${baseUrl.replace(/\/$/, '')}/api/offers` : '/api/offers';
+        const response = await axios.get<string>(apiPath);
         const parsedData = JSON.parse(response.data) as ApiResponse | Offer[];
         const offers = Array.isArray(parsedData) ? parsedData : parsedData.offers;
         actions.loadOffers(offers);
