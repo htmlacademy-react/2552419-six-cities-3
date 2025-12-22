@@ -4,8 +4,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig(({ mode }) => {
-  const base = mode === 'production' ? '/2552419-six-cities-3/' : '/';
+export default defineConfig(() => {
+  const base = '/2552419-six-cities-3/';
 
   return {
     base,
@@ -14,13 +14,10 @@ export default defineConfig(({ mode }) => {
       {
         name: 'html-transform',
         transformIndexHtml(html) {
-          if (mode === 'production') {
-            return html.replace(
-              /href="css\/main.css"/g,
-              `href="${base}css/main.css"`
-            );
-          }
-          return html;
+          return html.replace(
+            /href="css\/main.css"/g,
+            `href="${base}css/main.css"`
+          );
         },
       },
     ],
