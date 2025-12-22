@@ -35,6 +35,15 @@ jobs:
           head -20 dist/index.html || echo "dist/index.html not found"
           echo "Checking if 404.html exists:"
           [ -f "dist/404.html" ] && echo "404.html exists" || echo "404.html NOT FOUND"
+          if [ ! -f "dist/404.html" ]; then
+            echo "Creating 404.html from index.html..."
+            cp dist/index.html dist/404.html
+            echo "404.html created successfully"
+          fi
+          echo "Creating .nojekyll file to disable Jekyll..."
+          touch dist/.nojekyll
+          echo "Verifying dist contents:"
+          ls -la dist/ | head -20
         env:
           NODE_ENV: production
 

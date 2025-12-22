@@ -66,7 +66,7 @@ const OfferPage: FC = () => {
               <OfferInside items={INSIDE_ITEMS} />
               <OfferHost
                 name="Angelina"
-                avatarUrl={`${import.meta.env.BASE_URL || ''}img/avatar-angelina.jpg`}
+                avatarUrl="img/avatar-angelina.jpg"
                 isPro
                 description={[
                   'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.',

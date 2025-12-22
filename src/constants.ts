@@ -1,5 +1,4 @@
-import type { City, Offer } from './types/offer';
-import type { Review } from './mocks/reviews';
+import type { City } from './types/offer';
 
 const MAP_ICON = {
   WIDTH: 27,
@@ -34,11 +33,6 @@ const FAVORITE_COUNT = {
 } as const;
 
 const MOCK_EMAIL = 'Oliver.conner@gmail.com';
-
-const MOCK_OFFER = {
-  RATING: 4.8,
-  PRICE: 120,
-} as const;
 
 const PARTICLES_COUNT = 20;
 
@@ -88,67 +82,6 @@ const INSIDE_ITEMS = [
   'Fridge',
 ];
 
-const REVIEWS_DATA: Review[] = [
-  {
-    id: '1',
-    user: {
-      name: 'Max',
-      avatarUrl: 'img/avatar-max.jpg',
-    },
-    rating: 4.0,
-    comment: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.',
-    date: '2019-04-24',
-  },
-];
-
-const NEARBY_OFFERS: Offer[] = [
-  {
-    id: '1',
-    title: 'Wood and stone place',
-    type: 'Room',
-    price: 80,
-    previewImage: 'img/room.jpg',
-    rating: 4.0,
-    isFavorite: true,
-    city: { name: 'Amsterdam' },
-    location: {
-      latitude: 52.37454,
-      longitude: 4.897976,
-      zoom: 10,
-    },
-  },
-  {
-    id: '2',
-    title: 'Canal View Prinsengracht',
-    type: 'Apartment',
-    price: 132,
-    previewImage: 'img/apartment-02.jpg',
-    rating: 4.0,
-    isFavorite: false,
-    city: { name: 'Amsterdam' },
-    location: {
-      latitude: 52.35054,
-      longitude: 4.908976,
-      zoom: 10,
-    },
-  },
-  {
-    id: '3',
-    title: 'Nice, cozy, warm big bed apartment',
-    type: 'Apartment',
-    price: 180,
-    previewImage: 'img/apartment-03.jpg',
-    rating: 5.0,
-    isFavorite: false,
-    city: { name: 'Amsterdam' },
-    location: {
-      latitude: 52.39054,
-      longitude: 4.853096,
-      zoom: 10,
-    },
-  },
-];
-
 const CITIES: City[] = [
   { name: 'Paris' },
   { name: 'Cologne' },
@@ -177,14 +110,11 @@ export {
   OFFER,
   FAVORITE_COUNT,
   MOCK_EMAIL,
-  MOCK_OFFER,
   PARTICLES_COUNT,
   CITY_NAME,
   DEFAULT_SORT_OPTIONS,
   GALLERY_IMAGES,
   INSIDE_ITEMS,
-  REVIEWS_DATA,
-  NEARBY_OFFERS,
   CITIES,
   getOfferUrl,
 };

@@ -5,11 +5,13 @@ import type { RootState } from './index';
 export type DataState = {
   city: City;
   offers: Offer[];
+  isLoading: boolean;
 }
 
 const initialState: DataState = {
   city: { name: 'Paris' },
   offers: [],
+  isLoading: false,
 };
 
 const dataSlice = createSlice({
@@ -22,10 +24,13 @@ const dataSlice = createSlice({
     loadOffers: (state, action: PayloadAction<Offer[]>) => {
       state.offers = action.payload;
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { changeCity, loadOffers } = dataSlice.actions;
+export const { changeCity, loadOffers, setLoading } = dataSlice.actions;
 export default dataSlice.reducer;
 
 export const selectCity = (state: RootState) => state.data.city;
@@ -41,4 +46,5 @@ export const selectOfferById = (state: RootState, id: string | undefined) => {
   }
   return state.data.offers.find((offer) => offer.id === id);
 };
+export const selectIsLoading = (state: RootState): boolean => state.data.isLoading;
 

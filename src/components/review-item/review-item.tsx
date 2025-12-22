@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Rating from '../rating/rating';
+import { getImageUrl } from '../../utils/image-url';
 
 const AVATAR_SIZE = 54;
 
@@ -27,7 +28,7 @@ const ReviewItem: FC<ReviewItemProps> = ({user, rating, comment, date}) => {
     <li className="reviews__item">
       <div className="reviews__user user">
         <div className="reviews__avatar-wrapper user__avatar-wrapper">
-          <img className="reviews__avatar user__avatar" src={`${import.meta.env.BASE_URL || ''}${user.avatarUrl}`} width={AVATAR_SIZE} height={AVATAR_SIZE} alt="Reviews avatar" />
+          <img className="reviews__avatar user__avatar" src={getImageUrl(user.avatarUrl)} width={AVATAR_SIZE} height={AVATAR_SIZE} alt="Reviews avatar" />
         </div>
         <span className="reviews__user-name">
           {user.name}

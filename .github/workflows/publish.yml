@@ -46,6 +46,10 @@ jobs:
             echo "ERROR: index.html not found, cannot create 404.html"
             exit 1
           fi
+          echo "Creating .nojekyll file to disable Jekyll..."
+          touch dist/.nojekyll
+          echo "Verifying dist contents:"
+          ls -la dist/ | head -20
 
       - name: Deploy build to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4

@@ -1,45 +1,33 @@
 import { FC, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import axios from 'axios';
 import MainPage from '../pages/main-page/main-page';
 import LoginPage from '../pages/login-page/login-page';
 import FavoritesPage from '../pages/favorites-page/favorites-page';
 import OfferPage from '../pages/offer-page/offer-page';
 import NotFoundPage from '../pages/not-found-page/not-found-page';
 import PrivateRoute from '../components/private-route/private-route';
+import Spinner from '../components/spinner/spinner';
 import { AppRoute } from '../constants';
-import { loadOffers } from '../store/data-slice';
-import { useActionCreators } from '../store';
-import { MOCK_OFFERS } from '../mocks/offers';
-import type { Offer } from '../types/offer';
-
-type ApiResponse = {
-  offers: Offer[];
-}
+import { fetchOffersAction } from '../store/api-actions';
+import { useAppDispatch, useAppSelector } from '../store';
+import { selectIsLoading } from '../store/data-slice';
 
 const App: FC = () => {
-  const actions = useActionCreators({ loadOffers });
+  const dispatch = useAppDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment
+  const isLoading = useAppSelector(selectIsLoading);
   const isAuthorized = false;
 
   useEffect(() => {
-    const fetchOffers = async () => {
-      try {
-        const baseUrl = import.meta.env.BASE_URL || '';
-        const apiPath = baseUrl ? `${baseUrl.replace(/\/$/, '')}/api/offers` : '/api/offers';
-        const response = await axios.get<string>(apiPath);
-        const parsedData = JSON.parse(response.data) as ApiResponse | Offer[];
-        const offers = Array.isArray(parsedData) ? parsedData : parsedData.offers;
-        actions.loadOffers(offers);
-      } catch {
-        actions.loadOffers(MOCK_OFFERS);
-      }
-    };
-
-    fetchOffers();
-  }, [actions]);
+    dispatch(fetchOffersAction());
+  }, [dispatch]);
 
   const baseUrl = import.meta.env.BASE_URL || '';
   const basename = baseUrl.replace(/\/$/, '');
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <BrowserRouter basename={basename}>

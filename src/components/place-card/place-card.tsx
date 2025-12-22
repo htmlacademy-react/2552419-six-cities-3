@@ -7,6 +7,7 @@ import BookmarkButton from '../bookmark-button/bookmark-button';
 import Price from '../price/price';
 import PremiumMark from '../premium-mark/premium-mark';
 import { getOfferUrl } from '../../constants';
+import { getImageUrl } from '../../utils/image-url';
 
 const PLACE_CARD_IMAGE = {
   FAVORITES: {
@@ -63,7 +64,7 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
         <Link to={offerUrl}>
           <img
             className="place-card__image"
-            src={`${import.meta.env.BASE_URL || ''}${offer.previewImage}`}
+            src={getImageUrl(offer.previewImage)}
             width={imageWidth}
             height={imageHeight}
             alt="Place image"

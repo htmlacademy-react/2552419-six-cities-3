@@ -29,6 +29,14 @@ jobs:
           then
             cp -r public dist
           fi
+          echo "Checking if 404.html exists:"
+          [ -f "dist/404.html" ] && echo "404.html exists" || echo "404.html NOT FOUND"
+          if [ ! -f "dist/404.html" ] && [ -f "dist/index.html" ]; then
+            echo "Creating 404.html from index.html..."
+            cp dist/index.html dist/404.html
+          fi
+          echo "Creating .nojekyll file to disable Jekyll..."
+          touch dist/.nojekyll
           mkdir actions_artifacts
           echo "prev.event.number=${{ github.event.number }}" > actions_artifacts/env
           mv dist actions_artifacts

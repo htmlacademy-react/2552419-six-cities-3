@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../constants';
+import { getImageUrl } from '../../utils/image-url';
 
 const LOGO = {
   WIDTH: 81,
@@ -26,7 +27,7 @@ const Header: FC<HeaderProps> = ({user}) => {
         <div className="header__wrapper">
           <div className="header__left">
             <Link className="header__logo-link header__logo-link--active" to={AppRoute.Main}>
-              <img className="header__logo" src={`${import.meta.env.BASE_URL || ''}img/logo.svg`} alt="6 cities logo" width={LOGO.WIDTH} height={LOGO.HEIGHT} />
+              <img className="header__logo" src={getImageUrl('img/logo.svg')} alt="6 cities logo" width={LOGO.WIDTH} height={LOGO.HEIGHT} />
             </Link>
           </div>
           <nav className="header__nav">
