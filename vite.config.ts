@@ -3,7 +3,7 @@
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 
 export default defineConfig(() => {
@@ -27,6 +27,13 @@ export default defineConfig(() => {
         closeBundle() {
           try {
             const indexPath = resolve(__dirname, 'dist/index.html');
+            const fourOhFourPath = resolve(__dirname, 'dist/404.html');
+            
+            if (!existsSync(indexPath)) {
+              console.warn('index.html not found in dist, skipping 404.html creation');
+              return;
+            }
+
             let indexHtml = readFileSync(indexPath, 'utf-8');
 
             const basePath = base.replace(/\/$/, '');
@@ -57,9 +64,10 @@ export default defineConfig(() => {
             );
 
             writeFileSync(indexPath, indexHtml);
-            writeFileSync(resolve(__dirname, 'dist/404.html'), indexHtml);
-          } catch {
-            // Ignore errors if dist doesn't exist yet
+            writeFileSync(fourOhFourPath, indexHtml);
+            console.log(`✓ Created 404.html for GitHub Pages (base: ${basePath})`);
+          } catch (error) {
+            console.error('Error creating 404.html:', error);
           }
         },
       },
