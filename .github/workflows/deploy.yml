@@ -33,6 +33,8 @@ jobs:
           npm run build
           echo "Checking dist/index.html after build:"
           head -20 dist/index.html || echo "dist/index.html not found"
+          echo "Checking if 404.html exists:"
+          [ -f "dist/404.html" ] && echo "404.html exists" || echo "404.html NOT FOUND"
         env:
           NODE_ENV: production
 
