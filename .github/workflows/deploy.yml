@@ -27,7 +27,12 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          echo "BASE_PATH=$BASE_PATH"
+          echo "Building with BASE_PATH: $BASE_PATH"
+          npm run build
+          echo "Checking dist/index.html after build:"
+          head -20 dist/index.html || echo "dist/index.html not found"
         env:
           NODE_ENV: production
 

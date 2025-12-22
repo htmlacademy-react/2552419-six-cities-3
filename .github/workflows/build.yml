@@ -20,7 +20,11 @@ jobs:
 
       - name: Build
         run: |
+          echo "BASE_PATH=$BASE_PATH"
+          echo "Building with BASE_PATH: $BASE_PATH"
           npm run build --if-present
+          echo "Checking dist/index.html after build:"
+          head -20 dist/index.html || echo "dist/index.html not found"
           if [[ $(find . -maxdepth 1 -type d -name 'dist') == '' ]]
           then
             cp -r public dist

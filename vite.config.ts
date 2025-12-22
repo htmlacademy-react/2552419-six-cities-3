@@ -29,19 +29,31 @@ export default defineConfig(() => {
             const indexPath = resolve(__dirname, 'dist/index.html');
             let indexHtml = readFileSync(indexPath, 'utf-8');
 
+            const basePath = base.replace(/\/$/, '');
+
             indexHtml = indexHtml.replace(
-              /href="css\/main.css"/g,
-              `href="${base}css/main.css"`
+              /href="([^"]*\/)?css\/main.css"/g,
+              `href="${basePath}/css/main.css"`
             );
 
             indexHtml = indexHtml.replace(
               /src="([^"]*\/)?assets\/([^"]+)"/g,
-              (_match, _prefix: string | undefined, asset: string) => `src="${base}assets/${asset}"`
+              (_match, _prefix: string | undefined, asset: string) => {
+                if (_prefix && _prefix.includes(basePath)) {
+                  return `src="${basePath}/assets/${asset}"`;
+                }
+                return `src="${basePath}/assets/${asset}"`;
+              }
             );
 
             indexHtml = indexHtml.replace(
               /href="([^"]*\/)?assets\/([^"]+)"/g,
-              (_match, _prefix: string | undefined, asset: string) => `href="${base}assets/${asset}"`
+              (_match, _prefix: string | undefined, asset: string) => {
+                if (_prefix && _prefix.includes(basePath)) {
+                  return `href="${basePath}/assets/${asset}"`;
+                }
+                return `href="${basePath}/assets/${asset}"`;
+              }
             );
 
             writeFileSync(indexPath, indexHtml);
