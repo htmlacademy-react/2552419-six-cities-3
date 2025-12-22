@@ -63,7 +63,7 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
         <Link to={offerUrl}>
           <img
             className="place-card__image"
-            src={offer.previewImage}
+            src={`${import.meta.env.BASE_URL || ''}${offer.previewImage}`}
             width={imageWidth}
             height={imageHeight}
             alt="Place image"
