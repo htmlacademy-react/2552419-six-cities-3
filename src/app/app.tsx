@@ -36,7 +36,7 @@ const App: FC = () => {
     fetchOffers();
   }, [actions]);
 
-  const basename = import.meta.env.MODE === 'production' ? '/2552419-six-cities-3' : '';
+  const basename = import.meta.env.BASE_URL ? import.meta.env.BASE_URL.replace(/\/$/, '') : '';
 
   return (
     <BrowserRouter basename={basename}>
