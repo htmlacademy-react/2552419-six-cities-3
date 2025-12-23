@@ -15,10 +15,17 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': 'warn',
   },
+  ignorePatterns: ['src/setupTests.ts'],
   overrides: [
     {
       files: [ '*test*' ],
       rules: { '@typescript-eslint/unbound-method': 'off' }
+    },
+    {
+      files: ['vite.config.ts'],
+      parserOptions: {
+        project: 'tsconfig.node.json'
+      }
     },
   ],
 }

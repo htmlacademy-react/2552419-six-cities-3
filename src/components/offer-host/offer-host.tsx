@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { getImageUrl } from '../../utils/image-url';
 
 const HOST_AVATAR_SIZE = 74;
 
@@ -17,7 +18,7 @@ const OfferHost: FC<OfferHostProps> = ({name, avatarUrl, isPro = false, descript
       <h2 className="offer__host-title">Meet the host</h2>
       <div className="offer__host-user user">
         <div className={`offer__avatar-wrapper user__avatar-wrapper ${proClass}`}>
-          <img className="offer__avatar user__avatar" src={avatarUrl} width={HOST_AVATAR_SIZE} height={HOST_AVATAR_SIZE} alt="Host avatar" />
+          <img className="offer__avatar user__avatar" src={getImageUrl(avatarUrl)} width={HOST_AVATAR_SIZE} height={HOST_AVATAR_SIZE} alt="Host avatar" />
         </div>
         <span className="offer__user-name">
           {name}

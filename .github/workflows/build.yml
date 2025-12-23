@@ -8,26 +8,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18.x'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build
         run: |
-          NODE_ENV=development npm install && npm run build --if-present
+          npm run build --if-present
           if [[ $(find . -maxdepth 1 -type d -name 'dist') == '' ]]
           then
             cp -r public dist
           fi
+          if [ ! -f "dist/404.html" ] && [ -f "dist/index.html" ]; then
+            cp dist/index.html dist/404.html
+          fi
+          touch dist/.nojekyll
           mkdir actions_artifacts
           echo "prev.event.number=${{ github.event.number }}" > actions_artifacts/env
           mv dist actions_artifacts
+        env:
+          BASE_PATH: "/2552419-six-cities-3/${{ github.event.number }}/"
+          NODE_ENV: production
 
       - name: Save build
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: actions_artifacts
           path: actions_artifacts

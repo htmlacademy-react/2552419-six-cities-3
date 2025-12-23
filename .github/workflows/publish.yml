@@ -13,10 +13,10 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Download build
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v3
         with:
           name: actions_artifacts
           workflow: ${{ github.event.workflow_run.workflow_id }}
@@ -25,6 +25,15 @@ jobs:
         run: |
           echo "PR=$(cat env | grep "prev.event.number" | awk -F '=' '{print $2}')" >> $GITHUB_ENV
           echo "BUILD_URL=$(echo ${{ github.repository }} | sed -r 's/\//\.github\.io\//g')" >> $GITHUB_ENV
+
+      - name: Create 404.html for PR deploy
+        run: |
+          if [ -f "dist/index.html" ]; then
+            cp dist/index.html dist/404.html
+          else
+            exit 1
+          fi
+          touch dist/.nojekyll
 
       - name: Deploy build to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4

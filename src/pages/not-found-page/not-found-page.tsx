@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute, PARTICLES_COUNT } from '../../constants';
+import { getImageUrl } from '../../utils/image-url';
+import NotFoundGame from '../../components/404-game/404-game';
 import './not-found-page.css';
 
 const NotFoundPage: FC = () => {
@@ -34,13 +36,14 @@ const NotFoundPage: FC = () => {
 
       <header className="not-found-header">
         <Link to={AppRoute.Main} className="not-found-logo-link">
-          <img src="img/logo.svg" alt="6 cities logo" className="not-found-logo" />
+          <img src={getImageUrl('img/logo.svg')} alt="6 cities logo" className="not-found-logo" />
         </Link>
       </header>
 
       <div className="not-found-content">
         <h1 className="not-found-title">404</h1>
         <p className="not-found-text">Page Not Found</p>
+        <NotFoundGame />
         <Link to={AppRoute.Main} className="not-found-link">
           Go Home
         </Link>
@@ -48,6 +51,7 @@ const NotFoundPage: FC = () => {
 
       <footer className="not-found-footer">
         <p className="not-found-developer">Developed by Grigor Mkrtchyan</p>
+        <p className="not-found-mentor">Mentor: Yuriy Posledov</p>
       </footer>
     </div>
   );

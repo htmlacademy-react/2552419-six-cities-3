@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { getImageUrl } from '../../utils/image-url';
 
 type OfferGalleryProps = {
   images: string[];
@@ -10,7 +11,7 @@ const OfferGallery: FC<OfferGalleryProps> = ({images}) => (
       {images.map((image, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <div key={index} className="offer__image-wrapper">
-          <img className="offer__image" src={image} alt="Photo studio" />
+          <img className="offer__image" src={getImageUrl(image)} alt="Photo studio" />
         </div>
       ))}
     </div>
