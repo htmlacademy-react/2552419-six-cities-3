@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute, PARTICLES_COUNT } from '../../constants';
 import { getImageUrl } from '../../utils/image-url';
+import NotFoundGame from '../../components/404-game/404-game';
 import './not-found-page.css';
 
 const NotFoundPage: FC = () => {
@@ -42,6 +43,7 @@ const NotFoundPage: FC = () => {
       <div className="not-found-content">
         <h1 className="not-found-title">404</h1>
         <p className="not-found-text">Page Not Found</p>
+        <NotFoundGame />
         <Link to={AppRoute.Main} className="not-found-link">
           Go Home
         </Link>

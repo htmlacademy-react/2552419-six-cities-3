@@ -1,0 +1,97 @@
+.not-found-game__start {
+  position: relative;
+  z-index: 10;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #00ffff;
+  background: transparent;
+  border: 2px solid #00ffff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  box-shadow: 
+    0 0 10px #00ffff,
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.not-found-game__start:hover {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: #ff00ff;
+  color: #ff00ff;
+  box-shadow: 
+    0 0 20px #ff00ff,
+    inset 0 0 20px rgba(255, 0, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.not-found-game__particle {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: particlePulse 1s ease-in-out infinite;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  margin: 0;
+  padding: 0;
+  touch-action: manipulation;
+}
+
+.not-found-game__particle:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  animation: none;
+}
+
+.not-found-game__particle:active {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+@keyframes particlePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.not-found-game__result {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.not-found-game__result-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ff00ff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff;
+}
+
+.not-found-game__result-score {
+  font-size: 1rem;
+  color: #ff0000;
+  margin: 0;
+  text-shadow: 
+    0 0 10px #ff0000,
+    0 0 20px #ff0000;
+  font-weight: 700;
+}
+
