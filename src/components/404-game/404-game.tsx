@@ -14,8 +14,10 @@ const COLORS = ['#00ffff', '#ff00ff'];
 
 const NotFoundGame: FC = () => {
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_timeLeft, setTimeLeft] = useState(GAME_DURATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isPlaying, setIsPlaying] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const particleIdRef = useRef(0);
