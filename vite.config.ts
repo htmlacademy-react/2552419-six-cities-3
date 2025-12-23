@@ -43,16 +43,12 @@ export default defineConfig(() => {
 
             indexHtml = indexHtml.replace(
               /src="([^"]*\/)?assets\/([^"]+)"/g,
-              (_match, _prefix: string | undefined, asset: string) => {
-                return `src="${basePath}/assets/${asset}"`;
-              }
+              (_match, _prefix: string | undefined, asset: string) => `src="${basePath}/assets/${asset}"`
             );
 
             indexHtml = indexHtml.replace(
               /href="([^"]*\/)?assets\/([^"]+)"/g,
-              (_match, _prefix: string | undefined, asset: string) => {
-                return `href="${basePath}/assets/${asset}"`;
-              }
+              (_match, _prefix: string | undefined, asset: string) => `href="${basePath}/assets/${asset}"`
             );
 
             writeFileSync(indexPath, indexHtml);
@@ -61,6 +57,7 @@ export default defineConfig(() => {
             const nojekyllPath = resolve(__dirname, 'dist/.nojekyll');
             writeFileSync(nojekyllPath, '');
           } catch {
+            // Ignore errors during build
           }
         },
       },
