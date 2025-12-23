@@ -44,6 +44,7 @@
   margin: 0;
   padding: 0;
   touch-action: manipulation;
+  user-select: none;
 }
 
 .not-found-game__particle:hover {
@@ -94,4 +95,3 @@
     0 0 20px #ff0000;
   font-weight: 700;
 }
-

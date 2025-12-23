@@ -50,8 +50,36 @@ const NotFoundPage: FC = () => {
       </div>
 
       <footer className="not-found-footer">
-        <p className="not-found-developer">Developed by Grigor Mkrtchyan</p>
-        <p className="not-found-mentor">Mentor: Yuriy Posledov</p>
+        <p className="not-found-developer">
+          Developed by{' '}
+          <a
+            href="https://up.htmlacademy.ru/react-individual/3/user/2552419"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="not-found-link-text"
+          >
+            Grigor Mkrtchyan
+          </a>
+        </p>
+        <p className="not-found-mentor">
+          Mentor:{' '}
+          <a
+            href="https://htmlacademy.ru/profile/unidentifiedraccoon"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="not-found-link-text"
+          >
+            Yuriy Posledov
+          </a>
+        </p>
+        <a
+          href="https://htmlacademy.ru"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="not-found-academy-link"
+        >
+          HTML Academy
+        </a>
       </footer>
     </div>
   );

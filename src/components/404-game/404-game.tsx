@@ -38,7 +38,7 @@ const NotFoundGame: FC = () => {
     }, 2000);
   }, []);
 
-  const handleParticleClick = useCallback((particleId: number) => {
+  const handleParticleHover = useCallback((particleId: number) => {
     setParticles((prev) => prev.filter((p) => p.id !== particleId));
     setScore((prev) => prev + 1);
   }, []);
@@ -94,7 +94,7 @@ const NotFoundGame: FC = () => {
   return (
     <>
       {particles.map((particle) => (
-        <button
+        <div
           key={particle.id}
           className="not-found-game__particle"
           style={{
@@ -103,7 +103,7 @@ const NotFoundGame: FC = () => {
             borderColor: particle.color,
             boxShadow: `0 0 10px ${particle.color}, 0 0 20px ${particle.color}`,
           }}
-          onClick={() => handleParticleClick(particle.id)}
+          onMouseEnter={() => handleParticleHover(particle.id)}
         />
       ))}
 
