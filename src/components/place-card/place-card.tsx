@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCallback, FC } from 'react';
 import { Offer } from '../../types/offer';
 import { PlaceCardVariant } from '../../types/place-card-variant';
@@ -6,8 +6,11 @@ import Rating from '../rating/rating';
 import BookmarkButton from '../bookmark-button/bookmark-button';
 import Price from '../price/price';
 import PremiumMark from '../premium-mark/premium-mark';
-import { getOfferUrl } from '../../constants';
+import { getOfferUrl, AppRoute } from '../../constants';
 import { getImageUrl } from '../../utils/image-url';
+import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
+import { toggleFavoriteAction } from '../../store/api-actions';
+import { selectIsAuthorized } from '../../store/auth-slice';
 
 const PLACE_CARD_IMAGE = {
   FAVORITES: {
@@ -29,6 +32,10 @@ type PlaceCardProps = {
 }
 
 const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities, isPremium = false}) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthorized = useAppSelector(selectIsAuthorized);
+
   let imageWrapperClass = 'cities__image-wrapper';
   let cardClass = 'cities__card';
 
@@ -53,6 +60,17 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
     onCardLeave?.();
   }, [onCardLeave]);
 
+  const handleBookmarkClick = useCallback(() => {
+    if (!isAuthorized) {
+      navigate(AppRoute.Login);
+      return;
+    }
+    dispatch(toggleFavoriteAction({
+      offerId: offer.id,
+      isFavorite: !offer.isFavorite,
+    }));
+  }, [isAuthorized, navigate, dispatch, offer.id, offer.isFavorite]);
+
   return (
     <article
       className={`${cardClass} place-card`}
@@ -62,19 +80,21 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
       {isPremium && <PremiumMark />}
       <div className={`${imageWrapperClass} place-card__image-wrapper`}>
         <Link to={offerUrl}>
-          <img
-            className="place-card__image"
-            src={getImageUrl(offer.previewImage)}
-            width={imageWidth}
-            height={imageHeight}
-            alt="Place image"
-          />
+          {offer.previewImage && (
+            <img
+              className="place-card__image"
+              src={getImageUrl(offer.previewImage)}
+              width={imageWidth}
+              height={imageHeight}
+              alt="Place image"
+            />
+          )}
         </Link>
       </div>
       <div className={`${cardInfoClass} place-card__info`}>
         <div className="place-card__price-wrapper">
           <Price value={offer.price} />
-          <BookmarkButton isActive={offer.isFavorite} />
+          <BookmarkButton isActive={offer.isFavorite} onClick={handleBookmarkClick} />
         </div>
         <Rating rating={offer.rating} className="place-card__rating" />
         <h2 className="place-card__name">
