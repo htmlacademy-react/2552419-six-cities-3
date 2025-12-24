@@ -8,9 +8,9 @@ import Price from '../price/price';
 import PremiumMark from '../premium-mark/premium-mark';
 import { getOfferUrl, AppRoute } from '../../constants';
 import { getImageUrl } from '../../utils/image-url';
-import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
+import { useAppDispatch } from '../../hooks/use-redux';
 import { toggleFavoriteAction } from '../../store/api-actions';
-import { selectIsAuthorized } from '../../store/auth-slice';
+import { useAuth } from '../../hooks/use-auth';
 
 const PLACE_CARD_IMAGE = {
   FAVORITES: {
@@ -34,7 +34,7 @@ type PlaceCardProps = {
 const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities, isPremium = false}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuthorized = useAppSelector(selectIsAuthorized);
+  const { isAuthorized } = useAuth();
 
   let imageWrapperClass = 'cities__image-wrapper';
   let cardClass = 'cities__card';

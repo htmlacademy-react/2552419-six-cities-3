@@ -1,9 +1,9 @@
 import { FC, FormEvent, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/header';
-import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
+import { useAppDispatch } from '../../hooks/use-redux';
 import { loginAction } from '../../store/api-actions';
-import { selectIsAuthorized } from '../../store/auth-slice';
+import { useAuth } from '../../hooks/use-auth';
 import { AppRoute } from '../../constants';
 
 const isValidPassword = (password: string): boolean => {
@@ -15,7 +15,7 @@ const isValidPassword = (password: string): boolean => {
 const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuthorized = useAppSelector(selectIsAuthorized);
+  const { isAuthorized } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

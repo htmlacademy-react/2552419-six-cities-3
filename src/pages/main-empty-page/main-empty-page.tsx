@@ -3,12 +3,12 @@ import Header from '../../components/header/header';
 import LocationsList from '../../components/locations-list/locations-list';
 import { CITIES, CITY_NAME } from '../../constants';
 import { selectFavoriteOffers } from '../../store/data-slice';
-import { selectUser } from '../../store/auth-slice';
 import { useAppSelector } from '../../hooks/use-redux';
+import { useAuth } from '../../hooks/use-auth';
 
 const MainEmptyPage: FC = () => {
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const user = useAppSelector(selectUser);
+  const { user } = useAuth();
   const activeCity = useMemo(() => CITIES.find((city) => city.name === CITY_NAME.EMPTY_PAGE_ACTIVE), []);
 
   const citiesWithActive = useMemo(() => CITIES.map((city) => ({

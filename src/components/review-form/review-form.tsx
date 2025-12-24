@@ -1,9 +1,9 @@
 import { useState, FormEvent, ChangeEvent, useCallback, FC } from 'react';
 import { MIN_COMMENT_LENGTH, MAX_COMMENT_LENGTH, RATING } from '../../constants';
 import RatingStar from '../rating-star/rating-star';
-import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
+import { useAppDispatch } from '../../hooks/use-redux';
 import { submitReviewAction } from '../../store/api-actions';
-import { selectIsAuthorized } from '../../store/auth-slice';
+import { useAuth } from '../../hooks/use-auth';
 
 const RATING_OPTIONS = [
   { value: RATING.MAX, title: 'perfect' },
@@ -19,7 +19,7 @@ type ReviewFormProps = {
 
 const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
   const dispatch = useAppDispatch();
-  const isAuthorized = useAppSelector(selectIsAuthorized);
+  const { isAuthorized } = useAuth();
   const [rating, setRating] = useState<string>('');
   const [comment, setComment] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);

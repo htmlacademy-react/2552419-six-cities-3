@@ -2,12 +2,12 @@ import { FC } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { selectFavoriteOffers } from '../../store/data-slice';
-import { selectUser } from '../../store/auth-slice';
 import { useAppSelector } from '../../hooks/use-redux';
+import { useAuth } from '../../hooks/use-auth';
 
 const FavoritesEmptyPage: FC = () => {
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const user = useAppSelector(selectUser);
+  const { user } = useAuth();
 
   return (
     <div className="page page--favorites-empty">

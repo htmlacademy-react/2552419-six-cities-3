@@ -5,12 +5,12 @@ import PlaceCard from '../../components/place-card/place-card';
 import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER } from '../../constants';
 import { selectFavoriteOffers } from '../../store/data-slice';
-import { selectUser } from '../../store/auth-slice';
 import { useAppSelector } from '../../hooks/use-redux';
+import { useAuth } from '../../hooks/use-auth';
 
 const FavoritesPage: FC = () => {
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const user = useAppSelector(selectUser);
+  const { user } = useAuth();
   const amsterdamOffers = useMemo(() => favoriteOffers.slice(0, OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
   const cologneOffers = useMemo(() => favoriteOffers.slice(OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
 

@@ -15,9 +15,9 @@ import PlaceCard from '../../components/place-card/place-card';
 import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER, AppRoute } from '../../constants';
 import { selectOffers, selectFavoriteOffers, selectNearbyOffers } from '../../store/data-slice';
-import { selectUser, selectIsAuthorized } from '../../store/auth-slice';
 import { selectReviewsByOfferId } from '../../store/reviews-slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
+import { useAuth } from '../../hooks/use-auth';
 import { fetchReviewsAction, fetchOfferByIdAction, toggleFavoriteAction, fetchNearbyOffersAction } from '../../store/api-actions';
 
 const OfferPage: FC = () => {
@@ -26,8 +26,7 @@ const OfferPage: FC = () => {
   const dispatch = useAppDispatch();
   const offers = useAppSelector(selectOffers);
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const user = useAppSelector(selectUser);
-  const isAuthorized = useAppSelector(selectIsAuthorized);
+  const { isAuthorized, user } = useAuth();
   const [isOfferLoading, setIsOfferLoading] = useState(true);
   const currentOffer = useMemo(() => offers.find((offer) => offer.id === id), [offers, id]);
   const nearbyOffersFromStore = useAppSelector((state) => selectNearbyOffers(state, id));
