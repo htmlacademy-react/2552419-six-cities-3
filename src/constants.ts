@@ -16,6 +16,7 @@ const RATING = {
 } as const;
 
 const MIN_COMMENT_LENGTH = 50;
+const MAX_COMMENT_LENGTH = 300;
 const PERCENT_PER_STAR = 20;
 
 const OFFER = {
@@ -25,14 +26,19 @@ const OFFER = {
   PREMIUM_INDEX: 2,
   AMSTERDAM_COUNT: 2,
   FIRST_INDEX: 0,
+  MAX_IMAGES: 6,
+  MAX_REVIEWS_DISPLAY: 10,
 } as const;
 
-const FAVORITE_COUNT = {
-  DEFAULT: 3,
-  EMPTY: 0,
+const AVATAR = {
+  REVIEW_SIZE: 54,
+  HOST_SIZE: 74,
 } as const;
 
-const MOCK_EMAIL = 'Oliver.conner@gmail.com';
+const FAVORITE_STATUS = {
+  ACTIVE: 1 as const,
+  INACTIVE: 0 as const,
+} as const;
 
 const PARTICLES_COUNT = 20;
 
@@ -41,11 +47,30 @@ const CITY_NAME = {
   EMPTY_PAGE_ACTIVE: 'Dusseldorf',
 } as const;
 
+const API = {
+  BASE_URL: 'https://15.design.htmlacademy.pro/six-cities',
+  REQUEST_TIMEOUT: 5000,
+  TOKEN_HEADER: 'X-Token',
+} as const;
+
+const HTTP_STATUS = {
+  UNAUTHORIZED: 401 as const,
+  BAD_REQUEST: 400 as const,
+  NOT_FOUND: 404 as const,
+} as const;
+
 enum SortType {
   Popular = 'popular',
   PriceLow = 'price-low',
   PriceHigh = 'price-high',
   Rating = 'rating',
+}
+
+enum OfferType {
+  Apartment = 'apartment',
+  Room = 'room',
+  House = 'house',
+  Hotel = 'hotel',
 }
 
 type SortOption = {
@@ -58,28 +83,6 @@ const DEFAULT_SORT_OPTIONS: SortOption[] = [
   { name: 'Price: low to high', value: SortType.PriceLow },
   { name: 'Price: high to low', value: SortType.PriceHigh },
   { name: 'Top rated first', value: SortType.Rating },
-];
-
-const GALLERY_IMAGES = [
-  'img/room.jpg',
-  'img/apartment-01.jpg',
-  'img/apartment-02.jpg',
-  'img/apartment-03.jpg',
-  'img/studio-01.jpg',
-  'img/apartment-01.jpg',
-];
-
-const INSIDE_ITEMS = [
-  'Wi-Fi',
-  'Washing machine',
-  'Towels',
-  'Heating',
-  'Coffee machine',
-  'Baby seat',
-  'Kitchen',
-  'Dishwasher',
-  'Cable TV',
-  'Fridge',
 ];
 
 const CITIES: City[] = [
@@ -101,20 +104,21 @@ enum AppRoute {
 const getOfferUrl = (id: string): string => `/offer/${id}`;
 
 export type { SortOption };
-export { AppRoute, SortType };
+export { AppRoute, SortType, OfferType };
 export {
   MAP_ICON,
   RATING,
   MIN_COMMENT_LENGTH,
+  MAX_COMMENT_LENGTH,
   PERCENT_PER_STAR,
   OFFER,
-  FAVORITE_COUNT,
-  MOCK_EMAIL,
+  FAVORITE_STATUS,
+  AVATAR,
+  API,
+  HTTP_STATUS,
   PARTICLES_COUNT,
   CITY_NAME,
   DEFAULT_SORT_OPTIONS,
-  GALLERY_IMAGES,
-  INSIDE_ITEMS,
   CITIES,
   getOfferUrl,
 };
