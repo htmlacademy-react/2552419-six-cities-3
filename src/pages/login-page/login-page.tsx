@@ -25,22 +25,17 @@ const LoginPage: FC = () => {
     }
   }, [isAuthorized, navigate]);
 
-  const handleSubmit = useCallback(async (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (password.trim() === '' || !isValidPassword(password)) {
       return;
     }
 
-    const result = await dispatch(loginAction({ email, password }));
-    if (loginAction.fulfilled.match(result)) {
+    dispatch(loginAction({ email, password })).unwrap().then(() => {
       navigate(AppRoute.Main);
-    }
+    });
   }, [dispatch, email, navigate, password]);
-
-  const onFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    void handleSubmit(evt);
-  };
 
   if (isAuthorized) {
     return null;
@@ -54,7 +49,7 @@ const LoginPage: FC = () => {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post" onSubmit={onFormSubmit}>
+            <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input

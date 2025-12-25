@@ -22,47 +22,27 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
   const { isAuthorized } = useAuth();
   const [rating, setRating] = useState<string>('');
   const [comment, setComment] = useState<string>('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleRatingChange = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
     setRating(evt.target.value);
-    setError(null);
   }, []);
 
   const handleCommentChange = useCallback((evt: ChangeEvent<HTMLTextAreaElement>) => {
     setComment(evt.target.value);
-    setError(null);
   }, []);
 
-  const handleSubmit = useCallback(async (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
-
-    const result = await dispatch(submitReviewAction({
+    dispatch(submitReviewAction({
       offerId,
       reviewData: {
         rating: Number(rating),
         comment: comment.trim(),
       },
     }));
-
-    if (submitReviewAction.fulfilled.match(result)) {
-      setRating('');
-      setComment('');
-    } else {
-      if (result.payload && typeof result.payload === 'object' && 'error' in result.payload) {
-        const errorData = result.payload as { error?: string };
-        setError(errorData.error || 'Failed to submit review. Please try again.');
-      } else {
-        setError('Failed to submit review. Please try again.');
-      }
-    }
-    setIsSubmitting(false);
   }, [dispatch, offerId, rating, comment]);
 
-  const isSubmitDisabled = !rating || comment.trim().length < MIN_COMMENT_LENGTH || comment.trim().length > MAX_COMMENT_LENGTH || isSubmitting;
+  const isSubmitDisabled = !rating || comment.trim().length < MIN_COMMENT_LENGTH || comment.trim().length > MAX_COMMENT_LENGTH;
 
   if (!isAuthorized) {
     return null;
@@ -73,9 +53,7 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
       className="reviews__form form"
       action="#"
       method="post"
-      onSubmit={(e) => {
-        void handleSubmit(e);
-      }}
+      onSubmit={handleSubmit}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
@@ -86,7 +64,6 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
             title={option.title}
             checked={rating === String(option.value)}
             onChange={handleRatingChange}
-            disabled={isSubmitting}
           />
         ))}
       </div>
@@ -97,20 +74,14 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
         onChange={handleCommentChange}
-        disabled={isSubmitting}
         maxLength={MAX_COMMENT_LENGTH}
       />
-      {error && (
-        <div className="reviews__error" style={{ color: '#ff6b6b', marginTop: '0.5rem', fontSize: '0.875rem' }}>
-          {error}
-        </div>
-      )}
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_COMMENT_LENGTH} characters</b> and no more than <b className="reviews__text-amount">{MAX_COMMENT_LENGTH} characters</b>.
         </p>
         <button className="reviews__submit form__submit button" type="submit" disabled={isSubmitDisabled}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          Submit
         </button>
       </div>
     </form>

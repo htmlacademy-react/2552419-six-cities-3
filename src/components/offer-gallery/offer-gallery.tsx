@@ -12,9 +12,8 @@ const OfferGallery: FC<OfferGalleryProps> = ({images}) => {
   return (
     <div className="offer__gallery-container container">
       <div className="offer__gallery">
-        {displayImages.map((image, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <div key={index} className="offer__image-wrapper">
+        {displayImages.map((image) => (
+          <div key={image} className="offer__image-wrapper">
             <img className="offer__image" src={getImageUrl(image)} alt="Photo studio" />
           </div>
         ))}

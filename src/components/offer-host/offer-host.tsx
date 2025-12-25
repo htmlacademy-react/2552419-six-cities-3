@@ -29,9 +29,8 @@ const OfferHost: FC<OfferHostProps> = ({name, avatarUrl, isPro = false, descript
         )}
       </div>
       <div className="offer__description">
-        {description.map((text, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <p key={index} className="offer__text">
+        {description.map((text) => (
+          <p key={text} className="offer__text">
             {text}
           </p>
         ))}

@@ -61,13 +61,11 @@ const OfferPage: FC = () => {
 
     setIsOfferLoading(true);
 
-    // Всегда запрашиваем информацию по предложению
     dispatch(fetchOfferByIdAction(id))
       .then((result) => {
         if (fetchOfferByIdAction.rejected.match(result) && result.payload === 'NOT_FOUND') {
           navigate('/non-existent-route-for-404', { replace: true });
         } else {
-          // Запрашиваем nearby offers и reviews только если предложение найдено
           dispatch(fetchNearbyOffersAction(id));
           dispatch(fetchReviewsAction(id));
         }
@@ -83,7 +81,6 @@ const OfferPage: FC = () => {
       return;
     }
     if (currentOffer && id) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       dispatch(toggleFavoriteAction({
         offerId: id,
         isFavorite: !currentOffer.isFavorite,
@@ -106,7 +103,6 @@ const OfferPage: FC = () => {
       <main className="page__main page__main--offer">
         <section className="offer">
           <OfferGallery
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             images={currentOffer.images || (currentOffer.previewImage ? [currentOffer.previewImage] : [])}
           />
           <div className="offer__container container">
@@ -120,20 +116,16 @@ const OfferPage: FC = () => {
               </div>
               <Rating rating={currentOffer.rating} className="offer__rating" showValue />
               {currentOffer.bedrooms !== undefined && currentOffer.maxAdults !== undefined && (
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 <OfferFeatures type={currentOffer.type} bedrooms={currentOffer.bedrooms} maxAdults={currentOffer.maxAdults} />
               )}
               <Price value={currentOffer.price} variant="offer" />
               {currentOffer.goods && (
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 currentOffer.goods.length > 0 && <OfferInside items={currentOffer.goods} />
               )}
               {currentOffer.description && (
                 <div className="offer__description">
-                  {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */}
-                  {currentOffer.description.split('\n').map((paragraph, index) => (
-                    // eslint-disable-next-line react/no-array-index-key, @typescript-eslint/no-unsafe-assignment
-                    <p key={index} className="offer__text">
+                  {currentOffer.description.split('\n').map((paragraph) => (
+                    <p key={`${paragraph.slice(0, 30)}-${paragraph.length}`} className="offer__text">
                       {paragraph}
                     </p>
                   ))}
@@ -141,13 +133,9 @@ const OfferPage: FC = () => {
               )}
               {currentOffer.host && (
                 <OfferHost
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                   name={currentOffer.host.name}
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                   avatarUrl={currentOffer.host.avatarUrl}
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                   isPro={currentOffer.host.isPro}
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
                   description={currentOffer.description ? currentOffer.description.split('\n') : []}
                 />
               )}
