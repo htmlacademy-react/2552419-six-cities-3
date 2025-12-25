@@ -7,14 +7,14 @@ type OfferFeaturesProps = {
   maxAdults: number;
 }
 
-const getTypeLabel = (type: string): string => {
+const getTypeLabel = (type: OfferType): string => {
   const typeMap: Record<string, string> = {
     [OfferType.Apartment]: 'Apartment',
     [OfferType.Room]: 'Room',
     [OfferType.House]: 'House',
     [OfferType.Hotel]: 'Hotel',
   };
-  return typeMap[type.toLowerCase()] || type;
+  return typeMap[type] || type;
 };
 
 const OfferFeatures: FC<OfferFeaturesProps> = ({type, bedrooms, maxAdults}) => {
