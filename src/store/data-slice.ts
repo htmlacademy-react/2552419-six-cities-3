@@ -70,7 +70,7 @@ export const selectFavoriteOffers = createSelector(
 const EMPTY_ARRAY: Offer[] = [];
 
 export const selectOfferById = createSelector(
-  [selectOffers, (state: RootState, id: string | undefined) => id],
+  [selectOffers, (_state: RootState, id: string | undefined) => id],
   (offers, id) => {
     if (!id) {
       return undefined;
@@ -84,7 +84,7 @@ export const selectServerError = (state: RootState): boolean => state.data.serve
 
 const selectNearbyOffersRecord = (state: RootState) => state.data.nearbyOffers;
 export const selectNearbyOffers = createSelector(
-  [selectNearbyOffersRecord, (state: RootState, offerId: string | undefined) => offerId],
+  [selectNearbyOffersRecord, (_state: RootState, offerId: string | undefined) => offerId],
   (nearbyOffersRecord, offerId): Offer[] => {
     if (!offerId) {
       return EMPTY_ARRAY;

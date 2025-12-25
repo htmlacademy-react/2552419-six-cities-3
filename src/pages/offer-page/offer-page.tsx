@@ -12,6 +12,7 @@ import OfferHost from '../../components/offer-host/offer-host';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
 import PlaceCard from '../../components/place-card/place-card';
+import Spinner from '../../components/spinner/spinner';
 import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER, AppRoute } from '../../constants';
 import { selectNearbyOffers, selectOfferById } from '../../store/data-slice';
@@ -26,22 +27,22 @@ const OfferPage: FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthorized } = useAuth();
   const [isOfferLoading, setIsOfferLoading] = useState(true);
-  
+
   const selectCurrentOffer = useMemo(
     () => (state: RootState) => selectOfferById(state, id),
     [id]
   );
   const currentOffer = useAppSelector(selectCurrentOffer);
-  
+
   const selectNearby = useMemo(
     () => (state: RootState) => selectNearbyOffers(state, id),
     [id]
   );
   const nearbyOffersFromStore = useAppSelector(selectNearby);
-  
+
   const nearbyOffers = useMemo(() => nearbyOffersFromStore.slice(0, OFFER.NEARBY_COUNT), [nearbyOffersFromStore]);
   const mapOffers = useMemo(() => currentOffer ? [currentOffer, ...nearbyOffers] : nearbyOffers, [currentOffer, nearbyOffers]);
-  
+
   const selectReviews = useMemo(
     () => (state: RootState) => {
       if (!id) {
@@ -91,16 +92,7 @@ const OfferPage: FC = () => {
   }, [isAuthorized, navigate, dispatch, currentOffer, id]);
 
   if (isOfferLoading) {
-    return (
-      <div className="page">
-        <Header />
-        <main className="page__main">
-          <div className="container">
-            <p>Loading...</p>
-          </div>
-        </main>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (!currentOffer) {

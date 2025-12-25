@@ -18,6 +18,9 @@ export const store = configureStore({
       thunk: {
         extraArgument: api,
       },
+      serializableCheck: {
+        warnAfter: 128,
+      },
     }),
 });
 

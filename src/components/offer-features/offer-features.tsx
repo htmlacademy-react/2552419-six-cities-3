@@ -24,7 +24,7 @@ const OfferFeatures: FC<OfferFeaturesProps> = ({type, bedrooms, maxAdults}) => {
   return (
     <ul className="offer__features">
       <li className="offer__feature offer__feature--entire">
-        {getTypeLabel(type)}
+        {getTypeLabel(type as OfferType)}
       </li>
       <li className="offer__feature offer__feature--bedrooms">
         {bedrooms} {bedroomsLabel}
