@@ -53,7 +53,33 @@ export default defineConfig(() => {
             );
 
             writeFileSync(indexPath, indexHtml);
-            writeFileSync(fourOhFourPath, indexHtml);
+
+            const redirectUrl = basePath ? `${basePath}/index.html` : '/index.html';
+            const redirectScript = `
+  <script>
+    (function() {
+      const currentPath = window.location.pathname;
+      const redirectUrl = '${redirectUrl}';
+
+      if (currentPath !== redirectUrl && currentPath !== '/404.html') {
+        fetch(redirectUrl)
+          .then(response => response.text())
+          .then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+          })
+          .catch(() => {
+            window.location.replace(redirectUrl);
+          });
+      } else {
+        window.location.replace(redirectUrl);
+      }
+    })();
+  </script>`;
+
+            const fourOhFourHtml = indexHtml.replace('</head>', `${redirectScript}</head>`);
+            writeFileSync(fourOhFourPath, fourOhFourHtml);
 
             const nojekyllPath = resolve(__dirname, 'dist/.nojekyll');
             writeFileSync(nojekyllPath, '');
