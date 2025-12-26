@@ -2,24 +2,18 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../constants';
 import { getImageUrl } from '../../utils/image-url';
+import AuthorizedNavList from './authorized-nav-list';
+import UnauthorizedNavList from './unauthorized-nav-list';
+import { useAuth } from '../../hooks/use-auth';
 
 const LOGO = {
   WIDTH: 81,
   HEIGHT: 41,
 } as const;
-import AuthorizedNavList from './authorized-nav-list';
-import UnauthorizedNavList from './unauthorized-nav-list';
 
-type HeaderProps = {
-  user?: {
-    email: string;
-    avatarUrl?: string;
-    favoriteCount?: number;
-  };
-}
-
-const Header: FC<HeaderProps> = ({user}) => {
-  const navList = user ? <AuthorizedNavList user={user} /> : <UnauthorizedNavList />;
+const Header: FC = () => {
+  const { isAuthorized } = useAuth();
+  const navList = isAuthorized ? <AuthorizedNavList /> : <UnauthorizedNavList />;
 
   return (
     <header className="header">

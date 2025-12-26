@@ -7,6 +7,7 @@ import { requireAuthorization, setUser, AuthorizationStatus } from './auth-slice
 import { loadReviews, addReview } from './reviews-slice';
 import { saveToken, dropToken } from '../api/token';
 import { FAVORITE_STATUS } from '../constants';
+import { mapOfferServerToOffer, mapReviewServerToReview, type ServerOffer, type ServerReview } from '../utils/map-offer-server-to-offer';
 
 export const fetchOffersAction = createAsyncThunk<
   void,
@@ -18,8 +19,9 @@ export const fetchOffersAction = createAsyncThunk<
     dispatch(setLoading(true));
     dispatch(setServerError(false));
     try {
-      const { data } = await api.get<Offer[]>('/offers');
-      dispatch(loadOffers(data));
+      const { data } = await api.get<ServerOffer[]>('/offers');
+      const offers = data.map((item) => mapOfferServerToOffer(item));
+      dispatch(loadOffers(offers));
       dispatch(setServerError(false));
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -47,12 +49,9 @@ export const fetchOfferByIdAction = createAsyncThunk<
   'data/fetchOfferById',
   async (offerId, { dispatch, extra: api, rejectWithValue }) => {
     try {
-      const response = await api.get<Offer>(`/offers/${offerId}`);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const offer = response.data;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const response = await api.get<ServerOffer>(`/offers/${offerId}`);
+      const offer = mapOfferServerToOffer(response.data);
       dispatch(updateOffer(offer));
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return offer;
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 404) {
@@ -146,9 +145,9 @@ export const fetchReviewsAction = createAsyncThunk<
   'reviews/fetchReviews',
   async (offerId, { dispatch, extra: api }) => {
     try {
-      const response = await api.get<Review[]>(`/comments/${offerId}`);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      dispatch(loadReviews({ offerId, reviews: response.data }));
+      const response = await api.get<ServerReview[]>(`/comments/${offerId}`);
+      const reviews = response.data.map((item) => mapReviewServerToReview(item));
+      dispatch(loadReviews({ offerId, reviews }));
     } catch (error) {
       if (error instanceof AxiosError && !error.response) {
         dispatch(loadReviews({ offerId, reviews: [] }));
@@ -165,12 +164,9 @@ export const submitReviewAction = createAsyncThunk<
   'reviews/submitReview',
   async ({ offerId, reviewData }, { dispatch, extra: api, rejectWithValue }) => {
     try {
-      const response = await api.post<Review>(`/comments/${offerId}`, reviewData);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-      const review: Review = response.data;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment
+      const response = await api.post<ServerReview>(`/comments/${offerId}`, reviewData);
+      const review = mapReviewServerToReview(response.data);
       dispatch(addReview({ offerId, review }));
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return review;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -194,9 +190,9 @@ export const fetchNearbyOffersAction = createAsyncThunk<
   'data/fetchNearbyOffers',
   async (offerId, { dispatch, extra: api }) => {
     try {
-      const response = await api.get<Offer[]>(`/offers/${offerId}/nearby`);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      dispatch(loadNearbyOffers({ offerId, offers: response.data }));
+      const response = await api.get<ServerOffer[]>(`/offers/${offerId}/nearby`);
+      const offers = response.data.map((item) => mapOfferServerToOffer(item));
+      dispatch(loadNearbyOffers({ offerId, offers }));
     } catch (error) {
       if (error instanceof AxiosError && !error.response) {
         dispatch(loadNearbyOffers({ offerId, offers: [] }));
@@ -213,11 +209,9 @@ export const toggleFavoriteAction = createAsyncThunk<
   'data/toggleFavorite',
   async ({ offerId, isFavorite }, { dispatch, extra: api }) => {
     const status = isFavorite ? FAVORITE_STATUS.ACTIVE : FAVORITE_STATUS.INACTIVE;
-    const response = await api.post<Offer>(`/favorite/${offerId}/${status}`);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const offer = response.data;
+    const response = await api.post<ServerOffer>(`/favorite/${offerId}/${status}`);
+    const offer = mapOfferServerToOffer(response.data);
     dispatch(updateOfferFavorite({ id: offerId, isFavorite }));
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return offer;
   }
 );

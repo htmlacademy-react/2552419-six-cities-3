@@ -1,23 +1,23 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../constants';
-import { useAppDispatch } from '../../hooks/use-redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
 import { logoutAction } from '../../store/api-actions';
+import { selectUser } from '../../store/auth-slice';
+import { selectFavoriteOffers } from '../../store/data-slice';
 
-type AuthorizedNavListProps = {
-  user: {
-    email: string;
-    avatarUrl?: string;
-    favoriteCount?: number;
-  };
-}
-
-const AuthorizedNavList: FC<AuthorizedNavListProps> = ({user}) => {
+const AuthorizedNavList: FC = () => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+  const favoriteOffers = useAppSelector(selectFavoriteOffers);
 
   const handleSignOut = () => {
     dispatch(logoutAction());
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
@@ -26,8 +26,8 @@ const AuthorizedNavList: FC<AuthorizedNavListProps> = ({user}) => {
           <div className="header__avatar-wrapper user__avatar-wrapper">
           </div>
           <span className="header__user-name user__name">{user.email}</span>
-          {user.favoriteCount !== undefined && user.favoriteCount > 0 && (
-            <span className="header__favorite-count">{user.favoriteCount}</span>
+          {favoriteOffers.length > 0 && (
+            <span className="header__favorite-count">{favoriteOffers.length}</span>
           )}
         </Link>
       </li>

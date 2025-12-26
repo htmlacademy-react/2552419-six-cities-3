@@ -1,7 +1,9 @@
 import { FC, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { City } from '../../types/offer';
 import { changeCity } from '../../store/data-slice';
 import { useAppDispatch } from '../../hooks/use-redux';
+import { AppRoute } from '../../constants';
 
 type LocationsListProps = {
   cities: City[];
@@ -17,22 +19,20 @@ type LocationsItemProps = {
 const ListItem: FC<LocationsItemProps> = ({city, activeCity, onCityClick}) => {
   const className = `locations__item-link tabs__item ${city.isActive || activeCity?.name === city.name ? 'tabs__item--active' : ''}`;
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
     onCityClick(city);
   }, [onCityClick, city]);
 
   return (
     <li className="locations__item">
-      <a
+      <Link
         className={className}
-        href="#"
-        onClick={(evt) => {
-          evt.preventDefault();
-          handleClick();
-        }}
+        to={AppRoute.Main}
+        onClick={handleClick}
       >
         <span>{city.name}</span>
-      </a>
+      </Link>
     </li>
   );
 };

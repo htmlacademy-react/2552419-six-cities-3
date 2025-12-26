@@ -1,3 +1,5 @@
+import { OfferType } from '../constants';
+
 export type City = {
   name: string;
   isActive?: boolean;
@@ -18,7 +20,7 @@ export type Host = {
 export type Offer = {
   id: string;
   title: string;
-  type: string;
+  type: OfferType;
   price: number;
   previewImage?: string;
   images?: string[];

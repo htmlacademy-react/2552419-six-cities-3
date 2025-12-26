@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from '../pages/main-page/main-page';
 import LoginPage from '../pages/login-page/login-page';
@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/use-redux';
 import { selectIsLoading, selectServerError } from '../store/data-slice';
 import { selectAuthorizationStatus, AuthorizationStatus } from '../store/auth-slice';
 import ServerError from '../components/server-error/server-error';
+import { useMount } from '../hooks/use-mount';
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
@@ -20,10 +21,10 @@ const App: FC = () => {
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const serverError = useAppSelector(selectServerError);
 
-  useEffect(() => {
+  useMount(() => {
     dispatch(checkAuthAction());
     dispatch(fetchOffersAction());
-  }, [dispatch]);
+  });
 
   const baseUrl = import.meta.env.BASE_URL || '';
   const basename = baseUrl.replace(/\/$/, '');
@@ -51,6 +52,7 @@ const App: FC = () => {
           }
         />
         <Route path={AppRoute.Offer} element={<OfferPage />} />
+        <Route path={AppRoute.NotFound as string} element={<NotFoundPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

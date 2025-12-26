@@ -11,9 +11,13 @@ const Rating: FC<RatingProps> = ({rating, className = '', showValue = false}) =>
   const roundedRating = Math.round(rating);
   const ratingPercent = roundedRating * PERCENT_PER_STAR;
 
+  const starsClass = className.includes('place-card__rating')
+    ? 'place-card__stars rating__stars'
+    : 'rating__stars';
+
   return (
     <div className={`rating ${className}`}>
-      <div className="rating__stars">
+      <div className={starsClass}>
         <span style={{width: `${ratingPercent}%`}}></span>
         <span className="visually-hidden">Rating</span>
       </div>

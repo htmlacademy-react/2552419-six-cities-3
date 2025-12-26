@@ -6,13 +6,11 @@ import Map from '../../components/map/map';
 import { CITIES, DEFAULT_SORT_OPTIONS, SortType } from '../../constants';
 import { selectCity, selectOffers } from '../../store/data-slice';
 import { useAppSelector } from '../../hooks/use-redux';
-import { useAuth } from '../../hooks/use-auth';
 import { useBoolean } from '../../hooks/use-boolean';
 
 const MainPage: FC = () => {
   const city = useAppSelector(selectCity);
   const allOffers = useAppSelector(selectOffers);
-  const { user } = useAuth();
 
   const filteredOffers = useMemo(() => allOffers.filter((offer) => offer.city.name === city.name), [allOffers, city]);
 
@@ -66,7 +64,7 @@ const MainPage: FC = () => {
   if (sortedOffers.length === 0) {
     return (
       <div className="page page--gray page--main">
-        <Header user={user || undefined} />
+        <Header />
         <main className="page__main page__main--index page__main--index-empty">
           <h1 className="visually-hidden">Cities</h1>
           <LocationsList cities={citiesWithActive} activeCity={city} />
@@ -88,7 +86,7 @@ const MainPage: FC = () => {
 
   return (
     <div className="page page--gray page--main">
-      <Header user={user || undefined} />
+      <Header />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>

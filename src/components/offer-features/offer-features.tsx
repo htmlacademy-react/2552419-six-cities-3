@@ -2,19 +2,19 @@ import { FC } from 'react';
 import { OfferType } from '../../constants';
 
 type OfferFeaturesProps = {
-  type: string;
+  type: OfferType;
   bedrooms: number;
   maxAdults: number;
 }
 
-const getTypeLabel = (type: string): string => {
-  const typeMap: Record<string, string> = {
+const getTypeLabel = (type: OfferType): string => {
+  const typeMap: Record<OfferType, string> = {
     [OfferType.Apartment]: 'Apartment',
     [OfferType.Room]: 'Room',
     [OfferType.House]: 'House',
     [OfferType.Hotel]: 'Hotel',
   };
-  return typeMap[type.toLowerCase()] || type;
+  return typeMap[type] || 'Apartment';
 };
 
 const OfferFeatures: FC<OfferFeaturesProps> = ({type, bedrooms, maxAdults}) => {

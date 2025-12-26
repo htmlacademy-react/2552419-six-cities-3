@@ -67,18 +67,29 @@ export const selectFavoriteOffers = createSelector(
   [selectOffers],
   (offers) => offers.filter((offer: Offer) => offer.isFavorite)
 );
-export const selectOfferById = (state: RootState, id: string | undefined) => {
-  if (!id) {
-    return undefined;
+const EMPTY_ARRAY: Offer[] = [];
+
+export const selectOfferById = createSelector(
+  [selectOffers, (_state: RootState, id: string | undefined) => id],
+  (offers, id) => {
+    if (!id) {
+      return undefined;
+    }
+    return offers.find((offer: Offer) => offer.id === id);
   }
-  return state.data.offers.find((offer: Offer) => offer.id === id);
-};
+);
+
 export const selectIsLoading = (state: RootState): boolean => state.data.isLoading;
 export const selectServerError = (state: RootState): boolean => state.data.serverError;
-export const selectNearbyOffers = (state: RootState, offerId: string | undefined): Offer[] => {
-  if (!offerId) {
-    return [];
+
+const selectNearbyOffersRecord = (state: RootState) => state.data.nearbyOffers;
+export const selectNearbyOffers = createSelector(
+  [selectNearbyOffersRecord, (_state: RootState, offerId: string | undefined) => offerId],
+  (nearbyOffersRecord, offerId): Offer[] => {
+    if (!offerId) {
+      return EMPTY_ARRAY;
+    }
+    return nearbyOffersRecord[offerId] || EMPTY_ARRAY;
   }
-  return state.data.nearbyOffers[offerId] || [];
-};
+);
 

@@ -6,23 +6,15 @@ import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER } from '../../constants';
 import { selectFavoriteOffers } from '../../store/data-slice';
 import { useAppSelector } from '../../hooks/use-redux';
-import { useAuth } from '../../hooks/use-auth';
 
 const FavoritesPage: FC = () => {
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const { user } = useAuth();
   const amsterdamOffers = useMemo(() => favoriteOffers.slice(0, OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
   const cologneOffers = useMemo(() => favoriteOffers.slice(OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
 
   return (
     <div className="page">
-      <Header
-        user={user ? {
-          email: user.email,
-          avatarUrl: user.avatarUrl,
-          favoriteCount: favoriteOffers.length,
-        } : undefined}
-      />
+      <Header />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
@@ -38,12 +30,11 @@ const FavoritesPage: FC = () => {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {amsterdamOffers.map((offer, index) => (
+                  {amsterdamOffers.map((offer) => (
                     <PlaceCard
                       key={offer.id}
                       offer={offer}
                       variant={PlaceCardVariant.Favorites}
-                      isPremium={index === OFFER.FIRST_INDEX}
                     />
                   ))}
                 </div>
