@@ -1,7 +1,7 @@
 import type { Offer, Host, Review } from '../types/offer';
 import { OfferType } from '../constants';
 
-type ServerOffer = {
+export type ServerOffer = {
   id: string;
   title: string;
   type: string;
@@ -67,7 +67,7 @@ export const mapOfferServerToOffer = (offer: ServerOffer): Offer => ({
   host: mapHostServerToHost(offer.host),
 });
 
-type ServerReview = {
+export type ServerReview = {
   id: string;
   user: {
     name: string;

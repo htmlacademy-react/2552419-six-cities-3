@@ -7,7 +7,7 @@ import { requireAuthorization, setUser, AuthorizationStatus } from './auth-slice
 import { loadReviews, addReview } from './reviews-slice';
 import { saveToken, dropToken } from '../api/token';
 import { FAVORITE_STATUS } from '../constants';
-import { mapOfferServerToOffer, mapReviewServerToReview } from '../utils/map-offer-server-to-offer';
+import { mapOfferServerToOffer, mapReviewServerToReview, type ServerOffer, type ServerReview } from '../utils/map-offer-server-to-offer';
 
 export const fetchOffersAction = createAsyncThunk<
   void,
@@ -19,8 +19,8 @@ export const fetchOffersAction = createAsyncThunk<
     dispatch(setLoading(true));
     dispatch(setServerError(false));
     try {
-      const { data } = await api.get<unknown[]>('/offers');
-      const offers = data.map((item) => mapOfferServerToOffer(item as Parameters<typeof mapOfferServerToOffer>[0]));
+      const { data } = await api.get<ServerOffer[]>('/offers');
+      const offers = data.map((item) => mapOfferServerToOffer(item));
       dispatch(loadOffers(offers));
       dispatch(setServerError(false));
     } catch (error) {
@@ -49,8 +49,8 @@ export const fetchOfferByIdAction = createAsyncThunk<
   'data/fetchOfferById',
   async (offerId, { dispatch, extra: api, rejectWithValue }) => {
     try {
-      const response = await api.get<unknown>(`/offers/${offerId}`);
-      const offer = mapOfferServerToOffer(response.data as Parameters<typeof mapOfferServerToOffer>[0]);
+      const response = await api.get<ServerOffer>(`/offers/${offerId}`);
+      const offer = mapOfferServerToOffer(response.data);
       dispatch(updateOffer(offer));
       return offer;
     } catch (error) {
@@ -145,8 +145,8 @@ export const fetchReviewsAction = createAsyncThunk<
   'reviews/fetchReviews',
   async (offerId, { dispatch, extra: api }) => {
     try {
-      const response = await api.get<unknown[]>(`/comments/${offerId}`);
-      const reviews = response.data.map((item) => mapReviewServerToReview(item as Parameters<typeof mapReviewServerToReview>[0]));
+      const response = await api.get<ServerReview[]>(`/comments/${offerId}`);
+      const reviews = response.data.map((item) => mapReviewServerToReview(item));
       dispatch(loadReviews({ offerId, reviews }));
     } catch (error) {
       if (error instanceof AxiosError && !error.response) {
@@ -164,8 +164,8 @@ export const submitReviewAction = createAsyncThunk<
   'reviews/submitReview',
   async ({ offerId, reviewData }, { dispatch, extra: api, rejectWithValue }) => {
     try {
-      const response = await api.post<unknown>(`/comments/${offerId}`, reviewData);
-      const review = mapReviewServerToReview(response.data as Parameters<typeof mapReviewServerToReview>[0]);
+      const response = await api.post<ServerReview>(`/comments/${offerId}`, reviewData);
+      const review = mapReviewServerToReview(response.data);
       dispatch(addReview({ offerId, review }));
       return review;
     } catch (error) {
@@ -190,8 +190,8 @@ export const fetchNearbyOffersAction = createAsyncThunk<
   'data/fetchNearbyOffers',
   async (offerId, { dispatch, extra: api }) => {
     try {
-      const response = await api.get<unknown[]>(`/offers/${offerId}/nearby`);
-      const offers = response.data.map((item) => mapOfferServerToOffer(item as Parameters<typeof mapOfferServerToOffer>[0]));
+      const response = await api.get<ServerOffer[]>(`/offers/${offerId}/nearby`);
+      const offers = response.data.map((item) => mapOfferServerToOffer(item));
       dispatch(loadNearbyOffers({ offerId, offers }));
     } catch (error) {
       if (error instanceof AxiosError && !error.response) {
@@ -209,8 +209,8 @@ export const toggleFavoriteAction = createAsyncThunk<
   'data/toggleFavorite',
   async ({ offerId, isFavorite }, { dispatch, extra: api }) => {
     const status = isFavorite ? FAVORITE_STATUS.ACTIVE : FAVORITE_STATUS.INACTIVE;
-    const response = await api.post<unknown>(`/favorite/${offerId}/${status}`);
-    const offer = mapOfferServerToOffer(response.data as Parameters<typeof mapOfferServerToOffer>[0]);
+    const response = await api.post<ServerOffer>(`/favorite/${offerId}/${status}`);
+    const offer = mapOfferServerToOffer(response.data);
     dispatch(updateOfferFavorite({ id: offerId, isFavorite }));
     return offer;
   }
