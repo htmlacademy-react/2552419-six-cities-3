@@ -30,12 +30,11 @@ const FavoritesPage: FC = () => {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {amsterdamOffers.map((offer, index) => (
+                  {amsterdamOffers.map((offer) => (
                     <PlaceCard
                       key={offer.id}
                       offer={offer}
                       variant={PlaceCardVariant.Favorites}
-                      isPremium={index === OFFER.FIRST_INDEX}
                     />
                   ))}
                 </div>

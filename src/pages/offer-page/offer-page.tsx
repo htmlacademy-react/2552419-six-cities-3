@@ -148,12 +148,11 @@ const OfferPage: FC = () => {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {nearbyOffers.map((offer, index) => (
+              {nearbyOffers.map((offer) => (
                 <PlaceCard
                   key={offer.id}
                   offer={offer}
                   variant={PlaceCardVariant.NearPlaces}
-                  isPremium={index === OFFER.PREMIUM_INDEX}
                 />
               ))}
             </div>

@@ -6,7 +6,7 @@ import Rating from '../rating/rating';
 import BookmarkButton from '../bookmark-button/bookmark-button';
 import Price from '../price/price';
 import PremiumMark from '../premium-mark/premium-mark';
-import { getOfferUrl, AppRoute } from '../../constants';
+import { getOfferUrl, AppRoute, OfferType } from '../../constants';
 import { getImageUrl } from '../../utils/image-url';
 import { useAppDispatch } from '../../hooks/use-redux';
 import { toggleFavoriteAction } from '../../store/api-actions';
@@ -28,10 +28,19 @@ type PlaceCardProps = {
   onCardHover?: (offerId: string) => void;
   onCardLeave?: () => void;
   variant?: PlaceCardVariant;
-  isPremium?: boolean;
 }
 
-const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities, isPremium = false}) => {
+const getTypeLabel = (type: OfferType): string => {
+  const typeMap: Record<OfferType, string> = {
+    [OfferType.Apartment]: 'Apartment',
+    [OfferType.Room]: 'Room',
+    [OfferType.House]: 'House',
+    [OfferType.Hotel]: 'Hotel',
+  };
+  return typeMap[type] || 'Apartment';
+};
+
+const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isAuthorized } = useAuth();
@@ -77,7 +86,7 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {isPremium && <PremiumMark />}
+      {offer.isPremium && <PremiumMark />}
       <div className={`${imageWrapperClass} place-card__image-wrapper`}>
         <Link to={offerUrl}>
           {offer.previewImage && (
@@ -100,7 +109,7 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
         <h2 className="place-card__name">
           <Link to={offerUrl}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{getTypeLabel(offer.type)}</p>
       </div>
     </article>
   );
