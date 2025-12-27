@@ -1,4 +1,4 @@
-import { useEffect, useRef, FC, useMemo } from 'react';
+import { useEffect, useRef, FC, useMemo, memo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Offer } from '../../types/offer';
@@ -11,7 +11,7 @@ type MapProps = {
   className?: string;
 }
 
-const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
+const Map: FC<MapProps> = memo(({offers, selectedOfferId, className = ''}) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
@@ -59,8 +59,8 @@ const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
       if (mapInstanceRef.current) {
         try {
           mapInstanceRef.current.remove();
-        } catch {
-          // Ignore cleanup errors
+        } catch (error) {
+          void error;
         }
         mapInstanceRef.current = null;
         markersRef.current = [];
@@ -75,8 +75,9 @@ const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
     }
 
     const map = mapInstanceRef.current;
-    const offersChanged = offersRef.current.length !== offers.length ||
-      offersRef.current.some((oldOffer, index) => oldOffer.id !== offers[index]?.id);
+    const offersIds = offers.map((o) => o.id).join(',');
+    const oldOffersIds = offersRef.current.map((o) => o.id).join(',');
+    const offersChanged = offersIds !== oldOffersIds;
 
     if (offersChanged) {
       markersRef.current.forEach((marker) => {
@@ -111,8 +112,8 @@ const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
             if (mapInstanceRef.current && mapInstanceRef.current.getContainer()) {
               try {
                 mapInstanceRef.current.setView([latitude, longitude], zoom, { animate: false });
-              } catch {
-                // Ignore map view errors
+              } catch (error) {
+                void error;
               }
             }
           });
@@ -130,6 +131,8 @@ const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
   }, [offers, selectedOfferId, activeIcon, defaultIcon]);
 
   return <div ref={mapRef} className={`map ${className}`}></div>;
-};
+});
+
+Map.displayName = 'Map';
 
 export default Map;

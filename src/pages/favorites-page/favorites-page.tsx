@@ -1,16 +1,39 @@
 import { FC, useMemo } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
-import PlaceCard from '../../components/place-card/place-card';
-import { PlaceCardVariant } from '../../types/place-card-variant';
-import { OFFER } from '../../constants';
+import FavoriteCitySection from '../../components/favorite-city-section/favorite-city-section';
+import FavoritesEmptyPage from '../favorites-empty-page/favorites-empty-page';
 import { selectFavoriteOffers } from '../../store/data-slice';
-import { useAppSelector } from '../../hooks/use-redux';
+import { useAppSelector, useAppDispatch } from '../../hooks/use-redux';
+import { fetchFavoriteOffersAction } from '../../store/api-actions';
+import { useMount } from '../../hooks/use-mount';
+import type { Offer } from '../../types/offer';
 
 const FavoritesPage: FC = () => {
+  const dispatch = useAppDispatch();
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const amsterdamOffers = useMemo(() => favoriteOffers.slice(0, OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
-  const cologneOffers = useMemo(() => favoriteOffers.slice(OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
+
+  useMount(() => {
+    void dispatch(fetchFavoriteOffersAction());
+  });
+
+  const offersByCity = useMemo(() => {
+    const grouped: Record<string, Offer[]> = {};
+    favoriteOffers.forEach((offer) => {
+      const cityName = offer.city.name;
+      if (!grouped[cityName]) {
+        grouped[cityName] = [];
+      }
+      grouped[cityName].push(offer);
+    });
+    return grouped;
+  }, [favoriteOffers]);
+
+  const cityNames = useMemo(() => Object.keys(offersByCity), [offersByCity]);
+
+  if (favoriteOffers.length === 0) {
+    return <FavoritesEmptyPage />;
+  }
 
   return (
     <div className="page">
@@ -21,43 +44,9 @@ const FavoritesPage: FC = () => {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              <li className="favorites__locations-items">
-                <div className="favorites__locations locations locations--current">
-                  <div className="locations__item">
-                    <span className="locations__item-link">
-                      <span>Amsterdam</span>
-                    </span>
-                  </div>
-                </div>
-                <div className="favorites__places">
-                  {amsterdamOffers.map((offer) => (
-                    <PlaceCard
-                      key={offer.id}
-                      offer={offer}
-                      variant={PlaceCardVariant.Favorites}
-                    />
-                  ))}
-                </div>
-              </li>
-
-              <li className="favorites__locations-items">
-                <div className="favorites__locations locations locations--current">
-                  <div className="locations__item">
-                    <span className="locations__item-link">
-                      <span>Cologne</span>
-                    </span>
-                  </div>
-                </div>
-                <div className="favorites__places">
-                  {cologneOffers.map((offer) => (
-                    <PlaceCard
-                      key={offer.id}
-                      offer={offer}
-                      variant={PlaceCardVariant.Favorites}
-                    />
-                  ))}
-                </div>
-              </li>
+              {cityNames.map((cityName) => (
+                <FavoriteCitySection key={cityName} cityName={cityName} offers={offersByCity[cityName]} />
+              ))}
             </ul>
           </section>
         </div>

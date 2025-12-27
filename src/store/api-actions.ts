@@ -2,11 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { Offer, AuthInfo, Review, ReviewData } from '../types/offer';
 import type { AxiosInstance } from 'axios';
 import { AxiosError } from 'axios';
-import { loadOffers, setLoading, setServerError, updateOffer, updateOfferFavorite, loadNearbyOffers } from './data-slice';
-import { requireAuthorization, setUser, AuthorizationStatus } from './auth-slice';
-import { loadReviews, addReview } from './reviews-slice';
+import { loadOffers, setLoading, setServerError, updateOffer, updateOfferFavorite, loadNearbyOffers } from './data-actions';
+import { requireAuthorization, setUser } from './auth-actions';
+import { AuthorizationStatus } from './auth-slice';
+import { loadReviews, addReview } from './reviews-actions';
 import { saveToken, dropToken } from '../api/token';
-import { FAVORITE_STATUS } from '../constants';
+import { FAVORITE_STATUS, HTTP_STATUS } from '../constants';
 import { mapOfferServerToOffer, mapReviewServerToReview, type ServerOffer, type ServerReview } from '../utils/map-offer-server-to-offer';
 
 export const fetchOffersAction = createAsyncThunk<
@@ -25,7 +26,7 @@ export const fetchOffersAction = createAsyncThunk<
       dispatch(setServerError(false));
     } catch (error) {
       if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
+        if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
           dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
           dispatch(setUser(null));
         } else if (!error.response) {
@@ -54,7 +55,7 @@ export const fetchOfferByIdAction = createAsyncThunk<
       dispatch(updateOffer(offer));
       return offer;
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 404) {
+      if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.NOT_FOUND) {
         return rejectWithValue('NOT_FOUND');
       }
       throw error;
@@ -78,7 +79,7 @@ export const checkAuthAction = createAsyncThunk<
         avatarUrl: data.avatarUrl,
       }));
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 401) {
+      if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
         dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         dropToken();
         return rejectWithValue();
@@ -111,7 +112,7 @@ export const loginAction = createAsyncThunk<
         avatarUrl: data.avatarUrl,
       }));
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 400) {
+      if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.BAD_REQUEST) {
         return rejectWithValue(error.response.data as unknown);
       }
       throw error;
@@ -212,7 +213,30 @@ export const toggleFavoriteAction = createAsyncThunk<
     const response = await api.post<ServerOffer>(`/favorite/${offerId}/${status}`);
     const offer = mapOfferServerToOffer(response.data);
     dispatch(updateOfferFavorite({ id: offerId, isFavorite }));
+    dispatch(updateOffer(offer));
     return offer;
+  }
+);
+
+export const fetchFavoriteOffersAction = createAsyncThunk<
+  void,
+  undefined,
+  { extra: AxiosInstance }
+>(
+  'data/fetchFavoriteOffers',
+  async (_arg, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<ServerOffer[]>('/favorite');
+      const offers = data.map((item) => mapOfferServerToOffer(item));
+      offers.forEach((offer) => {
+        dispatch(updateOffer(offer));
+      });
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
+        dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+        dispatch(setUser(null));
+      }
+    }
   }
 );
 

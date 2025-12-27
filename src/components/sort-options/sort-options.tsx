@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, memo } from 'react';
 import { DEFAULT_SORT_OPTIONS, SortOption, SortType } from '../../constants';
 
 const ARROW_ICON = {
@@ -14,7 +14,7 @@ type SortOptionsProps = {
   onSortToggle?: () => void;
 }
 
-const SortOptions: FC<SortOptionsProps> = ({currentSort = 'Popular', isOpen = false, options = DEFAULT_SORT_OPTIONS, onSortChange, onSortToggle}) => {
+const SortOptions: FC<SortOptionsProps> = memo(({currentSort = 'Popular', isOpen = false, options = DEFAULT_SORT_OPTIONS, onSortChange, onSortToggle}) => {
   const handleOptionClick = useCallback((value: SortType) => {
     if (onSortChange) {
       onSortChange(value);
@@ -44,7 +44,9 @@ const SortOptions: FC<SortOptionsProps> = ({currentSort = 'Popular', isOpen = fa
       </ul>
     </form>
   );
-};
+});
+
+SortOptions.displayName = 'SortOptions';
 
 export default SortOptions;
 

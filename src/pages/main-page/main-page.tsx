@@ -3,16 +3,15 @@ import Header from '../../components/header/header';
 import LocationsList from '../../components/locations-list/locations-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
+import MainEmpty from '../../components/main-empty/main-empty';
 import { CITIES, DEFAULT_SORT_OPTIONS, SortType } from '../../constants';
-import { selectCity, selectOffers } from '../../store/data-slice';
+import { selectCity, selectOffersByCity } from '../../store/data-slice';
 import { useAppSelector } from '../../hooks/use-redux';
 import { useBoolean } from '../../hooks/use-boolean';
 
 const MainPage: FC = () => {
   const city = useAppSelector(selectCity);
-  const allOffers = useAppSelector(selectOffers);
-
-  const filteredOffers = useMemo(() => allOffers.filter((offer) => offer.city.name === city.name), [allOffers, city]);
+  const filteredOffers = useAppSelector(selectOffersByCity);
 
   const citiesWithActive = useMemo(() => CITIES.map((cityItem) => ({
     ...cityItem,
@@ -56,32 +55,13 @@ const MainPage: FC = () => {
     toggleSort();
   }, [toggleSort]);
 
-  const getSortName = useCallback((sort: SortType): string => {
-    const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === sort);
+  const currentSortName = useMemo(() => {
+    const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === currentSort);
     return option?.name || 'Popular';
-  }, []);
+  }, [currentSort]);
 
   if (sortedOffers.length === 0) {
-    return (
-      <div className="page page--gray page--main">
-        <Header />
-        <main className="page__main page__main--index page__main--index-empty">
-          <h1 className="visually-hidden">Cities</h1>
-          <LocationsList cities={citiesWithActive} activeCity={city} />
-          <div className="cities">
-            <div className="cities__places-container cities__places-container--empty container">
-              <section className="cities__no-places">
-                <div className="cities__status-wrapper tabs__content">
-                  <b className="cities__status">No places to stay available</b>
-                  <p className="cities__status-description">We could not find any property available at the moment in {city.name}</p>
-                </div>
-              </section>
-              <div className="cities__right-section"></div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <MainEmpty city={city} cities={citiesWithActive} />;
   }
 
   return (
@@ -97,7 +77,7 @@ const MainPage: FC = () => {
               offers={sortedOffers}
               offersCount={sortedOffers.length}
               cityName={city.name}
-              currentSort={getSortName(currentSort)}
+              currentSort={currentSortName}
               isSortOpen={isSortOpen}
               onSortChange={handleSortChange}
               onSortToggle={handleSortToggle}

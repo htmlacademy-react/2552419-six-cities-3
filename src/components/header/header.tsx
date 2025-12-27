@@ -1,17 +1,10 @@
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { AppRoute } from '../../constants';
-import { getImageUrl } from '../../utils/image-url';
+import { FC, memo } from 'react';
 import AuthorizedNavList from './authorized-nav-list';
 import UnauthorizedNavList from './unauthorized-nav-list';
+import Logo from '../logo/logo';
 import { useAuth } from '../../hooks/use-auth';
 
-const LOGO = {
-  WIDTH: 81,
-  HEIGHT: 41,
-} as const;
-
-const Header: FC = () => {
+const Header: FC = memo(() => {
   const { isAuthorized } = useAuth();
   const navList = isAuthorized ? <AuthorizedNavList /> : <UnauthorizedNavList />;
 
@@ -20,9 +13,7 @@ const Header: FC = () => {
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Link className="header__logo-link header__logo-link--active" to={AppRoute.Main}>
-              <img className="header__logo" src={getImageUrl('img/logo.svg')} alt="6 cities logo" width={LOGO.WIDTH} height={LOGO.HEIGHT} />
-            </Link>
+            <Logo className="header__logo-link header__logo-link--active" />
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
@@ -33,7 +24,9 @@ const Header: FC = () => {
       </div>
     </header>
   );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;
 

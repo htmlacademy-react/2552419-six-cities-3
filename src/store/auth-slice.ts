@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import type { RootState } from '../hooks/use-redux';
 import type { User } from '../types/offer';
+import { requireAuthorization, setUser } from './auth-actions';
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
@@ -18,21 +19,17 @@ const initialState: AuthState = {
   user: null,
 };
 
-const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    requireAuthorization: (state, action: PayloadAction<AuthorizationStatus>) => {
+const authReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(requireAuthorization, (state, action) => {
       state.authorizationStatus = action.payload;
-    },
-    setUser: (state, action: PayloadAction<User | null>) => {
+    })
+    .addCase(setUser, (state, action) => {
       state.user = action.payload;
-    },
-  },
+    });
 });
 
-export const { requireAuthorization, setUser } = authSlice.actions;
-export default authSlice.reducer;
+export default authReducer;
 
 export const selectAuthorizationStatus = (state: RootState): AuthorizationStatus => state.auth.authorizationStatus;
 export const selectUser = (state: RootState): User | null => state.auth.user;
