@@ -11,9 +11,9 @@ import OfferInside from '../../components/offer-inside/offer-inside';
 import OfferHost from '../../components/offer-host/offer-host';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
-import PlaceCard from '../../components/place-card/place-card';
+import NearPlaces from '../../components/near-places/near-places';
+import OfferDescription from '../../components/offer-description/offer-description';
 import Spinner from '../../components/spinner/spinner';
-import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER, AppRoute } from '../../constants';
 import { selectNearbyOffers, selectOfferById } from '../../store/data-slice';
 import { selectReviewsByOfferId } from '../../store/reviews-slice';
@@ -117,15 +117,7 @@ const OfferPage: FC = () => {
               {currentOffer.goods && (
                 currentOffer.goods.length > 0 && <OfferInside items={currentOffer.goods} />
               )}
-              {descriptionParagraphs.length > 0 && (
-                <div className="offer__description">
-                  {descriptionParagraphs.map((paragraph) => (
-                    <p key={`${paragraph.substring(0, Math.min(paragraph.length, 30))}-${paragraph.length}`} className="offer__text">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              )}
+              <OfferDescription paragraphs={descriptionParagraphs} />
               {currentOffer.host && (
                 <OfferHost
                   name={currentOffer.host.name}
@@ -139,20 +131,7 @@ const OfferPage: FC = () => {
           </div>
           <Map offers={mapOffers} selectedOfferId={currentOffer?.id} className="offer__map" />
         </section>
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <div className="near-places__list places__list">
-              {nearbyOffers.map((offer) => (
-                <PlaceCard
-                  key={offer.id}
-                  offer={offer}
-                  variant={PlaceCardVariant.NearPlaces}
-                />
-              ))}
-            </div>
-          </section>
-        </div>
+        <NearPlaces offers={nearbyOffers} />
       </main>
     </div>
   );

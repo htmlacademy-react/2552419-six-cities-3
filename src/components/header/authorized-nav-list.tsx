@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
@@ -6,14 +6,14 @@ import { logoutAction } from '../../store/api-actions';
 import { selectUser } from '../../store/auth-slice';
 import { selectFavoriteOffers } from '../../store/data-slice';
 
-const AuthorizedNavList: FC = () => {
+const AuthorizedNavList: FC = memo(() => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const favoriteOffers = useAppSelector(selectFavoriteOffers);
 
-  const handleSignOut = () => {
+  const handleSignOut = useCallback(() => {
     dispatch(logoutAction());
-  };
+  }, [dispatch]);
 
   if (!user) {
     return null;
@@ -38,7 +38,9 @@ const AuthorizedNavList: FC = () => {
       </li>
     </>
   );
-};
+});
+
+AuthorizedNavList.displayName = 'AuthorizedNavList';
 
 export default AuthorizedNavList;
 
