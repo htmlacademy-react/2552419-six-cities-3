@@ -2,11 +2,12 @@ import { FC, useMemo } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import FavoriteCitySection from '../../components/favorite-city-section/favorite-city-section';
-import { OFFER } from '../../constants';
+import FavoritesEmptyPage from '../favorites-empty-page/favorites-empty-page';
 import { selectFavoriteOffers } from '../../store/data-slice';
 import { useAppSelector, useAppDispatch } from '../../hooks/use-redux';
 import { fetchFavoriteOffersAction } from '../../store/api-actions';
 import { useMount } from '../../hooks/use-mount';
+import type { Offer } from '../../types/offer';
 
 const FavoritesPage: FC = () => {
   const dispatch = useAppDispatch();
@@ -15,8 +16,24 @@ const FavoritesPage: FC = () => {
   useMount(() => {
     void dispatch(fetchFavoriteOffersAction());
   });
-  const amsterdamOffers = useMemo(() => favoriteOffers.slice(0, OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
-  const cologneOffers = useMemo(() => favoriteOffers.slice(OFFER.AMSTERDAM_COUNT), [favoriteOffers]);
+
+  const offersByCity = useMemo(() => {
+    const grouped: Record<string, Offer[]> = {};
+    favoriteOffers.forEach((offer) => {
+      const cityName = offer.city.name;
+      if (!grouped[cityName]) {
+        grouped[cityName] = [];
+      }
+      grouped[cityName].push(offer);
+    });
+    return grouped;
+  }, [favoriteOffers]);
+
+  const cityNames = useMemo(() => Object.keys(offersByCity), [offersByCity]);
+
+  if (favoriteOffers.length === 0) {
+    return <FavoritesEmptyPage />;
+  }
 
   return (
     <div className="page">
@@ -27,8 +44,9 @@ const FavoritesPage: FC = () => {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              <FavoriteCitySection cityName="Amsterdam" offers={amsterdamOffers} />
-              <FavoriteCitySection cityName="Cologne" offers={cologneOffers} />
+              {cityNames.map((cityName) => (
+                <FavoriteCitySection key={cityName} cityName={cityName} offers={offersByCity[cityName]} />
+              ))}
             </ul>
           </section>
         </div>

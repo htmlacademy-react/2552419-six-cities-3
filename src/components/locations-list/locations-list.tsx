@@ -1,7 +1,7 @@
 import { FC, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { City } from '../../types/offer';
-import { changeCity } from '../../store/data-slice';
+import { changeCity } from '../../store/data-actions';
 import { useAppDispatch } from '../../hooks/use-redux';
 import { AppRoute } from '../../constants';
 

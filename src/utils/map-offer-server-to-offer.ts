@@ -1,5 +1,5 @@
 import type { Offer, Host, Review } from '../types/offer';
-import { OfferType } from '../constants';
+import { OfferType, OFFER } from '../constants';
 
 export type ServerOffer = {
   id: string;
@@ -46,26 +46,29 @@ const mapHostServerToHost = (host: ServerOffer['host']): Host | undefined => {
   };
 };
 
-export const mapOfferServerToOffer = (offer: ServerOffer): Offer => ({
-  id: offer.id,
-  title: offer.title,
-  type: offer.type as OfferType,
-  price: offer.price,
-  previewImage: offer.previewImage,
-  images: offer.images,
-  rating: offer.rating,
-  isFavorite: offer.isFavorite,
-  isPremium: offer.isPremium,
-  city: {
-    name: offer.city.name,
-  },
-  location: offer.location,
-  bedrooms: offer.bedrooms,
-  maxAdults: offer.maxAdults,
-  goods: offer.goods,
-  description: offer.description,
-  host: mapHostServerToHost(offer.host),
-});
+export const mapOfferServerToOffer = (offer: ServerOffer): Offer => {
+  const firstImageIndex = OFFER.FIRST_IMAGE_INDEX as number;
+  return {
+    id: offer.id,
+    title: offer.title,
+    type: offer.type as OfferType,
+    price: offer.price,
+    previewImage: offer.previewImage || offer.images?.[firstImageIndex],
+    images: offer.images,
+    rating: offer.rating,
+    isFavorite: offer.isFavorite,
+    isPremium: offer.isPremium,
+    city: {
+      name: offer.city.name,
+    },
+    location: offer.location,
+    bedrooms: offer.bedrooms,
+    maxAdults: offer.maxAdults,
+    goods: offer.goods,
+    description: offer.description,
+    host: mapHostServerToHost(offer.host),
+  };
+};
 
 export type ServerReview = {
   id: string;

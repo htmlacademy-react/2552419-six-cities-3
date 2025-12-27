@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 
-const FavoritesEmptyPage: FC = () => (
+const FavoritesEmptyPage: FC = memo(() => (
   <div className="page page--favorites-empty">
     <Header />
 
@@ -19,6 +19,8 @@ const FavoritesEmptyPage: FC = () => (
     </main>
     <Footer />
   </div>
-);
+));
+
+FavoritesEmptyPage.displayName = 'FavoritesEmptyPage';
 
 export default FavoritesEmptyPage;

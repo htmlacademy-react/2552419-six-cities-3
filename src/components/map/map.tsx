@@ -1,4 +1,4 @@
-import { useEffect, useRef, FC, useMemo } from 'react';
+import { useEffect, useRef, FC, useMemo, memo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Offer } from '../../types/offer';
@@ -11,7 +11,7 @@ type MapProps = {
   className?: string;
 }
 
-const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
+const Map: FC<MapProps> = memo(({offers, selectedOfferId, className = ''}) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
@@ -131,6 +131,8 @@ const Map: FC<MapProps> = ({offers, selectedOfferId, className = ''}) => {
   }, [offers, selectedOfferId, activeIcon, defaultIcon]);
 
   return <div ref={mapRef} className={`map ${className}`}></div>;
-};
+});
+
+Map.displayName = 'Map';
 
 export default Map;

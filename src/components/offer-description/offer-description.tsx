@@ -1,4 +1,5 @@
 import { FC, memo } from 'react';
+import { OFFER } from '../../constants';
 
 type OfferDescriptionProps = {
   paragraphs: string[];
@@ -12,7 +13,7 @@ const OfferDescription: FC<OfferDescriptionProps> = memo(({ paragraphs }) => {
   return (
     <div className="offer__description">
       {paragraphs.map((paragraph) => (
-        <p key={`${paragraph.substring(0, Math.min(paragraph.length, 30))}-${paragraph.length}`} className="offer__text">
+        <p key={`${paragraph.substring(0, Math.min(paragraph.length, OFFER.PARAGRAPH_KEY_PREFIX_LENGTH))}-${paragraph.length}`} className="offer__text">
           {paragraph}
         </p>
       ))}

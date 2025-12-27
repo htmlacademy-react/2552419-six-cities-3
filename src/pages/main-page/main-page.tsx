@@ -55,10 +55,10 @@ const MainPage: FC = () => {
     toggleSort();
   }, [toggleSort]);
 
-  const getSortName = useCallback((sort: SortType): string => {
-    const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === sort);
+  const currentSortName = useMemo(() => {
+    const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === currentSort);
     return option?.name || 'Popular';
-  }, []);
+  }, [currentSort]);
 
   if (sortedOffers.length === 0) {
     return <MainEmpty city={city} cities={citiesWithActive} />;
@@ -77,7 +77,7 @@ const MainPage: FC = () => {
               offers={sortedOffers}
               offersCount={sortedOffers.length}
               cityName={city.name}
-              currentSort={getSortName(currentSort)}
+              currentSort={currentSortName}
               isSortOpen={isSortOpen}
               onSortChange={handleSortChange}
               onSortToggle={handleSortToggle}
