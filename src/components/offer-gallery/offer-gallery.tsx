@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo, memo } from 'react';
 import { getImageUrl } from '../../utils/image-url';
 import { OFFER } from '../../constants';
 
@@ -6,8 +6,8 @@ type OfferGalleryProps = {
   images: string[];
 }
 
-const OfferGallery: FC<OfferGalleryProps> = ({images}) => {
-  const displayImages = images.slice(0, OFFER.MAX_IMAGES);
+const OfferGallery: FC<OfferGalleryProps> = memo(({images}) => {
+  const displayImages = useMemo(() => images.slice(0, OFFER.MAX_IMAGES), [images]);
 
   return (
     <div className="offer__gallery-container container">
@@ -20,7 +20,9 @@ const OfferGallery: FC<OfferGalleryProps> = ({images}) => {
       </div>
     </div>
   );
-};
+});
+
+OfferGallery.displayName = 'OfferGallery';
 
 export default OfferGallery;
 

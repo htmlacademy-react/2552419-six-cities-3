@@ -11,13 +11,13 @@ import OfferInside from '../../components/offer-inside/offer-inside';
 import OfferHost from '../../components/offer-host/offer-host';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
-import PlaceCard from '../../components/place-card/place-card';
+import NearPlaces from '../../components/near-places/near-places';
+import OfferDescription from '../../components/offer-description/offer-description';
 import Spinner from '../../components/spinner/spinner';
-import { PlaceCardVariant } from '../../types/place-card-variant';
 import { OFFER, AppRoute } from '../../constants';
 import { selectNearbyOffers, selectOfferById } from '../../store/data-slice';
 import { selectReviewsByOfferId } from '../../store/reviews-slice';
-import { useAppDispatch, useAppSelector, type RootState } from '../../hooks/use-redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
 import { useAuth } from '../../hooks/use-auth';
 import { fetchReviewsAction, fetchOfferByIdAction, toggleFavoriteAction, fetchNearbyOffersAction } from '../../store/api-actions';
 
@@ -28,31 +28,26 @@ const OfferPage: FC = () => {
   const { isAuthorized } = useAuth();
   const [isOfferLoading, setIsOfferLoading] = useState(true);
 
-  const selectCurrentOffer = useMemo(
-    () => (state: RootState) => selectOfferById(state, id),
-    [id]
-  );
-  const currentOffer = useAppSelector(selectCurrentOffer);
-
-  const selectNearby = useMemo(
-    () => (state: RootState) => selectNearbyOffers(state, id),
-    [id]
-  );
-  const nearbyOffersFromStore = useAppSelector(selectNearby);
+  const currentOffer = useAppSelector((state) => selectOfferById(state, id));
+  const nearbyOffersFromStore = useAppSelector((state) => selectNearbyOffers(state, id));
+  const reviews = useAppSelector((state) => id ? selectReviewsByOfferId(state, id) : []);
 
   const nearbyOffers = useMemo(() => nearbyOffersFromStore.slice(0, OFFER.NEARBY_COUNT), [nearbyOffersFromStore]);
   const mapOffers = useMemo(() => currentOffer ? [currentOffer, ...nearbyOffers] : nearbyOffers, [currentOffer, nearbyOffers]);
 
-  const selectReviews = useMemo(
-    () => (state: RootState) => {
-      if (!id) {
-        return [];
-      }
-      return selectReviewsByOfferId(state, id);
-    },
-    [id]
-  );
-  const reviews = useAppSelector(selectReviews);
+  const offerImages = useMemo(() => {
+    if (currentOffer?.images && currentOffer.images.length > 0) {
+      return currentOffer.images;
+    }
+    return currentOffer?.previewImage ? [currentOffer.previewImage] : [];
+  }, [currentOffer?.images, currentOffer?.previewImage]);
+
+  const descriptionParagraphs = useMemo(() => {
+    if (!currentOffer?.description) {
+      return [];
+    }
+    return currentOffer.description.split('\n');
+  }, [currentOffer?.description]);
 
   useEffect(() => {
     if (!id) {
@@ -103,7 +98,7 @@ const OfferPage: FC = () => {
       <main className="page__main page__main--offer">
         <section className="offer">
           <OfferGallery
-            images={currentOffer.images || (currentOffer.previewImage ? [currentOffer.previewImage] : [])}
+            images={offerImages}
           />
           <div className="offer__container container">
             <div className="offer__wrapper">
@@ -122,21 +117,13 @@ const OfferPage: FC = () => {
               {currentOffer.goods && (
                 currentOffer.goods.length > 0 && <OfferInside items={currentOffer.goods} />
               )}
-              {currentOffer.description && (
-                <div className="offer__description">
-                  {currentOffer.description.split('\n').map((paragraph) => (
-                    <p key={`${paragraph.slice(0, 30)}-${paragraph.length}`} className="offer__text">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              )}
+              <OfferDescription paragraphs={descriptionParagraphs} />
               {currentOffer.host && (
                 <OfferHost
                   name={currentOffer.host.name}
                   avatarUrl={currentOffer.host.avatarUrl}
                   isPro={currentOffer.host.isPro}
-                  description={currentOffer.description ? currentOffer.description.split('\n') : []}
+                  description={descriptionParagraphs}
                 />
               )}
               <Reviews reviews={reviews} showForm={isAuthorized} offerId={currentOffer.id} />
@@ -144,20 +131,7 @@ const OfferPage: FC = () => {
           </div>
           <Map offers={mapOffers} selectedOfferId={currentOffer?.id} className="offer__map" />
         </section>
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <div className="near-places__list places__list">
-              {nearbyOffers.map((offer) => (
-                <PlaceCard
-                  key={offer.id}
-                  offer={offer}
-                  variant={PlaceCardVariant.NearPlaces}
-                />
-              ))}
-            </div>
-          </section>
-        </div>
+        <NearPlaces offers={nearbyOffers} />
       </main>
     </div>
   );

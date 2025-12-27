@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { getImageUrl } from '../../utils/image-url';
 import { AVATAR } from '../../constants';
 
@@ -9,7 +9,7 @@ type OfferHostProps = {
   description: string[];
 }
 
-const OfferHost: FC<OfferHostProps> = ({name, avatarUrl, isPro = false, description}) => {
+const OfferHost: FC<OfferHostProps> = memo(({name, avatarUrl, isPro = false, description}) => {
   const proClass = isPro ? 'offer__avatar-wrapper--pro' : '';
 
   return (
@@ -37,7 +37,9 @@ const OfferHost: FC<OfferHostProps> = ({name, avatarUrl, isPro = false, descript
       </div>
     </div>
   );
-};
+});
+
+OfferHost.displayName = 'OfferHost';
 
 export default OfferHost;
 

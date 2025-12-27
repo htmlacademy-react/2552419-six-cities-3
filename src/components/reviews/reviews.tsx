@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, memo } from 'react';
 import ReviewItem from '../review-item/review-item';
 import ReviewForm from '../review-form/review-form';
 import type { Review } from '../../types/offer';
@@ -10,7 +10,7 @@ type ReviewsProps = {
   offerId?: string;
 }
 
-const Reviews: FC<ReviewsProps> = ({reviews, showForm = false, offerId}) => {
+const Reviews: FC<ReviewsProps> = memo(({reviews, showForm = false, offerId}) => {
   const sortedAndLimitedReviews = useMemo(() => {
     const sorted = [...reviews].sort((a, b) => {
       const dateA = new Date(a.date).getTime();
@@ -37,7 +37,9 @@ const Reviews: FC<ReviewsProps> = ({reviews, showForm = false, offerId}) => {
       {showForm && offerId && <ReviewForm offerId={offerId} />}
     </section>
   );
-};
+});
+
+Reviews.displayName = 'Reviews';
 
 export default Reviews;
 

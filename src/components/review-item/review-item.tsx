@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo, useMemo } from 'react';
 import Rating from '../rating/rating';
 import { getImageUrl } from '../../utils/image-url';
 import { AVATAR } from '../../constants';
@@ -20,8 +20,8 @@ function formatDate(dateString: string): string {
   return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 }
 
-const ReviewItem: FC<ReviewItemProps> = ({user, rating, comment, date}) => {
-  const formattedDate = formatDate(date);
+const ReviewItem: FC<ReviewItemProps> = memo(({user, rating, comment, date}) => {
+  const formattedDate = useMemo(() => formatDate(date), [date]);
 
   return (
     <li className="reviews__item">
@@ -42,7 +42,9 @@ const ReviewItem: FC<ReviewItemProps> = ({user, rating, comment, date}) => {
       </div>
     </li>
   );
-};
+});
+
+ReviewItem.displayName = 'ReviewItem';
 
 export default ReviewItem;
 

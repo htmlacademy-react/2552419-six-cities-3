@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { City } from '../../types/offer';
 import { changeCity } from '../../store/data-slice';
@@ -16,7 +16,7 @@ type LocationsItemProps = {
   onCityClick: (city: City) => void;
 }
 
-const ListItem: FC<LocationsItemProps> = ({city, activeCity, onCityClick}) => {
+const ListItem: FC<LocationsItemProps> = memo(({city, activeCity, onCityClick}) => {
   const className = `locations__item-link tabs__item ${city.isActive || activeCity?.name === city.name ? 'tabs__item--active' : ''}`;
 
   const handleClick = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
@@ -35,9 +35,11 @@ const ListItem: FC<LocationsItemProps> = ({city, activeCity, onCityClick}) => {
       </Link>
     </li>
   );
-};
+});
 
-const LocationsList: FC<LocationsListProps> = ({cities, activeCity}) => {
+ListItem.displayName = 'ListItem';
+
+const LocationsList: FC<LocationsListProps> = memo(({cities, activeCity}) => {
   const dispatch = useAppDispatch();
 
   const handleCityClick = useCallback((city: City) => {
@@ -60,7 +62,9 @@ const LocationsList: FC<LocationsListProps> = ({cities, activeCity}) => {
       </section>
     </div>
   );
-};
+});
+
+LocationsList.displayName = 'LocationsList';
 
 export default LocationsList;
 

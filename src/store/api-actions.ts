@@ -212,7 +212,30 @@ export const toggleFavoriteAction = createAsyncThunk<
     const response = await api.post<ServerOffer>(`/favorite/${offerId}/${status}`);
     const offer = mapOfferServerToOffer(response.data);
     dispatch(updateOfferFavorite({ id: offerId, isFavorite }));
+    dispatch(updateOffer(offer));
     return offer;
+  }
+);
+
+export const fetchFavoriteOffersAction = createAsyncThunk<
+  void,
+  undefined,
+  { extra: AxiosInstance }
+>(
+  'data/fetchFavoriteOffers',
+  async (_arg, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<ServerOffer[]>('/favorite');
+      const offers = data.map((item) => mapOfferServerToOffer(item));
+      offers.forEach((offer) => {
+        dispatch(updateOffer(offer));
+      });
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+        dispatch(setUser(null));
+      }
+    }
   }
 );
 

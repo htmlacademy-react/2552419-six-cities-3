@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 type PriceProps = {
   value: number;
@@ -7,7 +7,7 @@ type PriceProps = {
   variant?: 'card' | 'offer';
 }
 
-const Price: FC<PriceProps> = ({value, className = '', showText = true, variant = 'card'}) => {
+const Price: FC<PriceProps> = memo(({value, className = '', showText = true, variant = 'card'}) => {
   const priceClass = variant === 'offer' ? 'offer__price' : 'place-card__price';
   const valueClass = variant === 'offer' ? 'offer__price-value' : 'place-card__price-value';
   const textClass = variant === 'offer' ? 'offer__price-text' : 'place-card__price-text';
@@ -22,7 +22,9 @@ const Price: FC<PriceProps> = ({value, className = '', showText = true, variant 
       )}
     </div>
   );
-};
+});
+
+Price.displayName = 'Price';
 
 export default Price;
 

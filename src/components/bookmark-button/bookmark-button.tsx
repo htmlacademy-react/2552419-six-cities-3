@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 type BookmarkButtonProps = {
   isActive?: boolean;
@@ -18,7 +18,7 @@ const BOOKMARK_ICON = {
   },
 } as const;
 
-const BookmarkButton: FC<BookmarkButtonProps> = ({isActive = false, className = '', size = 'small', onClick}) => {
+const BookmarkButton: FC<BookmarkButtonProps> = memo(({isActive = false, className = '', size = 'small', onClick}) => {
   const iconWidth = size === 'large' ? BOOKMARK_ICON.LARGE.WIDTH : BOOKMARK_ICON.SMALL.WIDTH;
   const iconHeight = size === 'large' ? BOOKMARK_ICON.LARGE.HEIGHT : BOOKMARK_ICON.SMALL.HEIGHT;
   const buttonClass = size === 'large' ? 'offer__bookmark-button' : 'place-card__bookmark-button';
@@ -38,7 +38,9 @@ const BookmarkButton: FC<BookmarkButtonProps> = ({isActive = false, className = 
       <span className="visually-hidden">{text}</span>
     </button>
   );
-};
+});
+
+BookmarkButton.displayName = 'BookmarkButton';
 
 export default BookmarkButton;
 

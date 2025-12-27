@@ -14,8 +14,9 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': 'warn',
+    'react/prop-types': 'off',
   },
-  ignorePatterns: ['src/setupTests.ts'],
+  ignorePatterns: ['src/setupTests.ts', '.eslintrc.cjs'],
   overrides: [
     {
       files: [ '*test*' ],
@@ -25,6 +26,13 @@ module.exports = {
       files: ['vite.config.ts'],
       parserOptions: {
         project: 'tsconfig.node.json'
+      }
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        'react/prop-types': 'off',
+        '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions', 'functions'] }],
       }
     },
   ],
