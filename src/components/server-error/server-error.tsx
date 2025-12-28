@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import './server-error.css';
 
-const ServerError: FC = () => (
+const ServerError: FC = memo(() => (
   <div className="server-error">
     <div className="server-error__content">
       <h2 className="server-error__title">Server Unavailable</h2>
@@ -10,7 +10,9 @@ const ServerError: FC = () => (
       </p>
     </div>
   </div>
-);
+));
+
+ServerError.displayName = 'ServerError';
 
 export default ServerError;
 

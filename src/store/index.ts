@@ -1,28 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
-import dataReducer from './data-slice';
-import authReducer from './auth-slice';
-import reviewsReducer from './reviews-slice';
-import type { DataState } from './data-slice';
+import { rootReducer } from './root-reducer';
 import { createAPI } from '../api/api';
+import { REDUX } from '../constants';
 
 const api = createAPI();
 
 export const store = configureStore({
-  reducer: {
-    data: dataReducer,
-    auth: authReducer,
-    reviews: reviewsReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
         extraArgument: api,
       },
       serializableCheck: {
-        warnAfter: 128,
+        warnAfter: REDUX.SERIALIZABLE_CHECK_WARN_AFTER as number,
       },
     }),
 });
 
-export type { DataState as State };
+export type { RootState } from './root-reducer';
 

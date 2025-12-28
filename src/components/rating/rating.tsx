@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { PERCENT_PER_STAR } from '../../constants';
 
 type RatingProps = {
@@ -7,7 +7,7 @@ type RatingProps = {
   showValue?: boolean;
 }
 
-const Rating: FC<RatingProps> = ({rating, className = '', showValue = false}) => {
+const Rating: FC<RatingProps> = memo(({rating, className = '', showValue = false}) => {
   const roundedRating = Math.round(rating);
   const ratingPercent = roundedRating * PERCENT_PER_STAR;
 
@@ -26,7 +26,9 @@ const Rating: FC<RatingProps> = ({rating, className = '', showValue = false}) =>
       )}
     </div>
   );
-};
+});
+
+Rating.displayName = 'Rating';
 
 export default Rating;
 

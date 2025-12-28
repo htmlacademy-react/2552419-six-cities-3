@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useCallback, FC } from 'react';
+import { useCallback, FC, memo } from 'react';
 import { Offer } from '../../types/offer';
 import { PlaceCardVariant } from '../../types/place-card-variant';
 import Rating from '../rating/rating';
@@ -40,7 +40,7 @@ const getTypeLabel = (type: OfferType): string => {
   return typeMap[type] || 'Apartment';
 };
 
-const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities}) => {
+const PlaceCard: FC<PlaceCardProps> = memo(({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isAuthorized } = useAuth();
@@ -113,7 +113,9 @@ const PlaceCard: FC<PlaceCardProps> = ({offer, onCardHover, onCardLeave, variant
       </div>
     </article>
   );
-};
+});
+
+PlaceCard.displayName = 'PlaceCard';
 
 export default PlaceCard;
 

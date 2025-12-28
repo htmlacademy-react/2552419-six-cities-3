@@ -1,17 +1,23 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { AppRoute, PARTICLES_COUNT } from '../../constants';
+import { AppRoute, PARTICLES_COUNT, NOT_FOUND_PAGE } from '../../constants';
 import { getImageUrl } from '../../utils/image-url';
 import NotFoundGame from '../../components/404-game/404-game';
 import './not-found-page.css';
 
 const NotFoundPage: FC = () => {
+  const particlePositionMax = NOT_FOUND_PAGE.PARTICLE_POSITION_MAX as number;
+  const particleDurationMin = NOT_FOUND_PAGE.PARTICLE_DURATION_MIN as number;
+  const particleDurationMax = NOT_FOUND_PAGE.PARTICLE_DURATION_MAX as number;
+  const particleDelayMax = NOT_FOUND_PAGE.PARTICLE_DELAY_MAX as number;
+  const errorCode = NOT_FOUND_PAGE.ERROR_CODE as number;
+
   const particles = Array.from({ length: PARTICLES_COUNT }, (_, i) => ({
     id: `particle-${i}`,
-    left: Math.random() * 100,
-    top: Math.random() * 100,
-    duration: 3 + Math.random() * 4,
-    delay: Math.random() * 2,
+    left: Math.random() * particlePositionMax,
+    top: Math.random() * particlePositionMax,
+    duration: particleDurationMin + Math.random() * particleDurationMax,
+    delay: Math.random() * particleDelayMax,
   }));
 
   return (
@@ -41,7 +47,7 @@ const NotFoundPage: FC = () => {
       </header>
 
       <div className="not-found-content">
-        <h1 className="not-found-title">404</h1>
+        <h1 className="not-found-title">{errorCode}</h1>
         <p className="not-found-text">Page Not Found</p>
         <NotFoundGame />
         <Link to={AppRoute.Main} className="not-found-link">

@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
+import { createReducer, createSelector } from '@reduxjs/toolkit';
 import type { Offer, City } from '../types/offer';
 import type { RootState } from '../hooks/use-redux';
+import { changeCity, loadOffers, updateOffer, setLoading, setServerError, updateOfferFavorite, loadNearbyOffers } from './data-actions';
+import { OFFER } from '../constants';
 
 export type DataState = {
   city: City;
@@ -18,44 +20,48 @@ const initialState: DataState = {
   serverError: false,
 };
 
-const dataSlice = createSlice({
-  name: 'data',
-  initialState,
-  reducers: {
-    changeCity: (state, action: PayloadAction<City>) => {
+const dataReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(changeCity, (state, action) => {
       state.city = action.payload;
-    },
-    loadOffers: (state, action: PayloadAction<Offer[]>) => {
+    })
+    .addCase(loadOffers, (state, action) => {
       state.offers = action.payload;
-    },
-    updateOffer: (state, action: PayloadAction<Offer>) => {
+    })
+    .addCase(updateOffer, (state, action) => {
       const index = state.offers.findIndex((offer) => offer.id === action.payload.id);
+      const firstImageIndex = OFFER.FIRST_IMAGE_INDEX as number;
       if (index !== -1) {
-        state.offers[index] = action.payload;
+        const existingOffer = state.offers[index];
+        state.offers[index] = {
+          ...action.payload,
+          previewImage: action.payload.previewImage || existingOffer.previewImage || action.payload.images?.[firstImageIndex],
+        };
       } else {
-        state.offers.push(action.payload);
+        state.offers.push({
+          ...action.payload,
+          previewImage: action.payload.previewImage || action.payload.images?.[firstImageIndex],
+        });
       }
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    })
+    .addCase(setLoading, (state, action) => {
       state.isLoading = action.payload;
-    },
-    setServerError: (state, action: PayloadAction<boolean>) => {
+    })
+    .addCase(setServerError, (state, action) => {
       state.serverError = action.payload;
-    },
-    updateOfferFavorite: (state, action: PayloadAction<{ id: string; isFavorite: boolean }>) => {
+    })
+    .addCase(updateOfferFavorite, (state, action) => {
       const offer = state.offers.find((o) => o.id === action.payload.id);
       if (offer) {
         offer.isFavorite = action.payload.isFavorite;
       }
-    },
-    loadNearbyOffers: (state, action: PayloadAction<{ offerId: string; offers: Offer[] }>) => {
+    })
+    .addCase(loadNearbyOffers, (state, action) => {
       state.nearbyOffers[action.payload.offerId] = action.payload.offers;
-    },
-  },
+    });
 });
 
-export const { changeCity, loadOffers, setLoading, setServerError, updateOffer, updateOfferFavorite, loadNearbyOffers } = dataSlice.actions;
-export default dataSlice.reducer;
+export default dataReducer;
 
 export const selectCity = (state: RootState) => state.data.city;
 export const selectOffers = (state: RootState) => state.data.offers;

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { OfferType } from '../../constants';
 
 type OfferFeaturesProps = {
@@ -17,7 +17,7 @@ const getTypeLabel = (type: OfferType): string => {
   return typeMap[type] || 'Apartment';
 };
 
-const OfferFeatures: FC<OfferFeaturesProps> = ({type, bedrooms, maxAdults}) => {
+const OfferFeatures: FC<OfferFeaturesProps> = memo(({type, bedrooms, maxAdults}) => {
   const bedroomsLabel = bedrooms === 1 ? 'Bedroom' : 'Bedrooms';
   const adultsLabel = maxAdults === 1 ? 'adult' : 'adults';
 
@@ -34,7 +34,9 @@ const OfferFeatures: FC<OfferFeaturesProps> = ({type, bedrooms, maxAdults}) => {
       </li>
     </ul>
   );
-};
+});
+
+OfferFeatures.displayName = 'OfferFeatures';
 
 export default OfferFeatures;
 

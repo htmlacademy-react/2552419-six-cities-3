@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import PlaceCard from '../place-card/place-card';
 import SortOptions from '../sort-options/sort-options';
 import { Offer } from '../../types/offer';
@@ -16,7 +16,7 @@ type PlacesListProps = {
   onCardLeave?: () => void;
 }
 
-const PlacesList: FC<PlacesListProps> = ({offers, offersCount, cityName, currentSort, isSortOpen, onSortChange, onSortToggle, onCardHover, onCardLeave}) => (
+const PlacesList: FC<PlacesListProps> = memo(({offers, offersCount, cityName, currentSort, isSortOpen, onSortChange, onSortToggle, onCardHover, onCardLeave}) => (
   <section className="cities__places places">
     <h2 className="visually-hidden">Places</h2>
     <b className="places__found">{offersCount} places to stay in {cityName}</b>
@@ -32,7 +32,9 @@ const PlacesList: FC<PlacesListProps> = ({offers, offersCount, cityName, current
       ))}
     </div>
   </section>
-);
+));
+
+PlacesList.displayName = 'PlacesList';
 
 export default PlacesList;
 

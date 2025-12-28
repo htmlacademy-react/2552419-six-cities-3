@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, memo } from 'react';
 
 const STAR_ICON = {
   WIDTH: 37,
@@ -13,7 +13,7 @@ type RatingStarProps = {
   disabled?: boolean;
 }
 
-const RatingStar: FC<RatingStarProps> = ({ value, title, checked, onChange, disabled = false }) => {
+const RatingStar: FC<RatingStarProps> = memo(({ value, title, checked, onChange, disabled = false }) => {
   const id = `${value}-stars`;
 
   return (
@@ -35,7 +35,9 @@ const RatingStar: FC<RatingStarProps> = ({ value, title, checked, onChange, disa
       </label>
     </>
   );
-};
+});
+
+RatingStar.displayName = 'RatingStar';
 
 export default RatingStar;
 
