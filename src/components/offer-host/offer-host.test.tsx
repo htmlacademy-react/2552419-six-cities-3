@@ -26,7 +26,7 @@ describe('OfferHost', () => {
       <OfferHost
         name="Jane Smith"
         avatarUrl="avatar.jpg"
-        isPro={true}
+        isPro
         description={description}
       />
     );

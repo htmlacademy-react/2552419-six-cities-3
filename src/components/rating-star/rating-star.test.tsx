@@ -26,7 +26,7 @@ describe('RatingStar', () => {
       <RatingStar
         value={4}
         title="good"
-        checked={true}
+        checked
         onChange={mockOnChange}
       />
     );
@@ -43,7 +43,7 @@ describe('RatingStar', () => {
         title="not bad"
         checked={false}
         onChange={mockOnChange}
-        disabled={true}
+        disabled
       />
     );
 
