@@ -30,17 +30,16 @@ type PlaceCardProps = {
   variant?: PlaceCardVariant;
 }
 
-const getTypeLabel = (type: OfferType): string => {
-  const typeMap: Record<OfferType, string> = {
-    [OfferType.Apartment]: 'Apartment',
-    [OfferType.Room]: 'Room',
-    [OfferType.House]: 'House',
-    [OfferType.Hotel]: 'Hotel',
-  };
-  return typeMap[type] || 'Apartment';
-};
-
 const PlaceCard: FC<PlaceCardProps> = memo(({offer, onCardHover, onCardLeave, variant = PlaceCardVariant.Cities}) => {
+  const getTypeLabel = (type: OfferType): string => {
+    const typeMap: Record<OfferType, string> = {
+      [OfferType.Apartment]: 'Apartment',
+      [OfferType.Room]: 'Room',
+      [OfferType.House]: 'House',
+      [OfferType.Hotel]: 'Hotel',
+    };
+    return typeMap[type] || 'Apartment';
+  };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isAuthorized } = useAuth();

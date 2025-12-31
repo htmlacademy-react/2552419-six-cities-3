@@ -1,12 +1,5 @@
 import { FC, memo } from 'react';
 
-type BookmarkButtonProps = {
-  isActive?: boolean;
-  className?: string;
-  size?: 'small' | 'large';
-  onClick?: () => void;
-}
-
 const BOOKMARK_ICON = {
   LARGE: {
     WIDTH: 31,
@@ -17,6 +10,13 @@ const BOOKMARK_ICON = {
     HEIGHT: 19,
   },
 } as const;
+
+type BookmarkButtonProps = {
+  isActive?: boolean;
+  className?: string;
+  size?: 'small' | 'large';
+  onClick?: () => void;
+}
 
 const BookmarkButton: FC<BookmarkButtonProps> = memo(({isActive = false, className = '', size = 'small', onClick}) => {
   const iconWidth = size === 'large' ? BOOKMARK_ICON.LARGE.WIDTH : BOOKMARK_ICON.SMALL.WIDTH;

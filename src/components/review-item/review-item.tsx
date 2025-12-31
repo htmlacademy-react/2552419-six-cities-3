@@ -1,4 +1,4 @@
-import { FC, memo, useMemo } from 'react';
+import { FC } from 'react';
 import Rating from '../rating/rating';
 import { getImageUrl } from '../../utils/image-url';
 import { AVATAR } from '../../constants';
@@ -13,15 +13,15 @@ type ReviewItemProps = {
   date: string;
 }
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
-  return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-}
+const ReviewItem: FC<ReviewItemProps> = ({user, rating, comment, date}) => {
+  const formatDate = (dateString: string): string => {
+    const dateObj = new Date(dateString);
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
+    return `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+  };
 
-const ReviewItem: FC<ReviewItemProps> = memo(({user, rating, comment, date}) => {
-  const formattedDate = useMemo(() => formatDate(date), [date]);
+  const formattedDate = formatDate(date);
 
   return (
     <li className="reviews__item">
@@ -42,7 +42,7 @@ const ReviewItem: FC<ReviewItemProps> = memo(({user, rating, comment, date}) => 
       </div>
     </li>
   );
-});
+};
 
 ReviewItem.displayName = 'ReviewItem';
 
