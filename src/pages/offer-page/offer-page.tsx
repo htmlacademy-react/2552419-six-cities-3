@@ -54,10 +54,16 @@ const OfferPage: FC = () => {
       return;
     }
 
+    let isMounted = true;
+
     setIsOfferLoading(true);
 
     dispatch(fetchOfferByIdAction(id))
       .then((result) => {
+        if (!isMounted) {
+          return;
+        }
+
         if (fetchOfferByIdAction.rejected.match(result) && result.payload === 'NOT_FOUND') {
           navigate(AppRoute.NotFound as string, { replace: true });
         } else {
@@ -66,8 +72,14 @@ const OfferPage: FC = () => {
         }
       })
       .finally(() => {
-        setIsOfferLoading(false);
+        if (isMounted) {
+          setIsOfferLoading(false);
+        }
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, id, navigate]);
 
   const handleBookmarkClick = useCallback(() => {
@@ -117,7 +129,7 @@ const OfferPage: FC = () => {
               {currentOffer.goods && (
                 currentOffer.goods.length > 0 && <OfferInside items={currentOffer.goods} />
               )}
-              <OfferDescription paragraphs={descriptionParagraphs} />
+              {descriptionParagraphs.length !== 0 && <OfferDescription paragraphs={descriptionParagraphs} />}
               {currentOffer.host && (
                 <OfferHost
                   name={currentOffer.host.name}
