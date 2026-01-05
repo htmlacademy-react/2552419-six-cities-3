@@ -16,23 +16,27 @@ type PlacesListProps = {
   onCardLeave?: () => void;
 }
 
-const PlacesList: FC<PlacesListProps> = memo(({offers, offersCount, cityName, currentSort, isSortOpen, onSortChange, onSortToggle, onCardHover, onCardLeave}) => (
-  <section className="cities__places places">
-    <h2 className="visually-hidden">Places</h2>
-    <b className="places__found">{offersCount} places to stay in {cityName}</b>
-    <SortOptions currentSort={currentSort} isOpen={isSortOpen} onSortChange={onSortChange} onSortToggle={onSortToggle} />
-    <div className="cities__places-list places__list tabs__content">
-      {offers.map((offer) => (
-        <PlaceCard
-          key={offer.id}
-          offer={offer}
-          onCardHover={onCardHover}
-          onCardLeave={onCardLeave}
-        />
-      ))}
-    </div>
-  </section>
-));
+const PlacesList: FC<PlacesListProps> = memo(({offers, offersCount, cityName, currentSort, isSortOpen, onSortChange, onSortToggle, onCardHover, onCardLeave}) => {
+  const placesText = offersCount === 1 ? 'place' : 'places';
+
+  return (
+    <section className="cities__places places">
+      <h2 className="visually-hidden">Places</h2>
+      <b className="places__found">{offersCount} {placesText} to stay in {cityName}</b>
+      <SortOptions currentSort={currentSort} isOpen={isSortOpen} onSortChange={onSortChange} onSortToggle={onSortToggle} />
+      <div className="cities__places-list places__list tabs__content">
+        {offers.map((offer) => (
+          <PlaceCard
+            key={offer.id}
+            offer={offer}
+            onCardHover={onCardHover}
+            onCardLeave={onCardLeave}
+          />
+        ))}
+      </div>
+    </section>
+  );
+});
 
 PlacesList.displayName = 'PlacesList';
 
