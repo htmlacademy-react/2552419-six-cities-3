@@ -7,9 +7,9 @@ describe('OfferDescription', () => {
     const paragraphs = ['First paragraph', 'Second paragraph', 'Third paragraph'];
     render(<OfferDescription paragraphs={paragraphs} />);
 
-    expect(screen.getByText('First paragraph')).toBeInTheDocument();
-    expect(screen.getByText('Second paragraph')).toBeInTheDocument();
-    expect(screen.getByText('Third paragraph')).toBeInTheDocument();
+    paragraphs.map((paragraph) =>
+      expect(screen.getByText(paragraph)).toBeInTheDocument()
+    );
   });
 
   it('should render nothing when paragraphs array is empty', () => {

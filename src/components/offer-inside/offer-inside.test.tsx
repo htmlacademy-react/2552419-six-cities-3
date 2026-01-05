@@ -8,10 +8,9 @@ describe('OfferInside', () => {
     render(<OfferInside items={items} />);
 
     expect(screen.getByText('What\'s inside')).toBeInTheDocument();
-    expect(screen.getByText('WiFi')).toBeInTheDocument();
-    expect(screen.getByText('Heating')).toBeInTheDocument();
-    expect(screen.getByText('Kitchen')).toBeInTheDocument();
-    expect(screen.getByText('Cable TV')).toBeInTheDocument();
+    items.map((item) =>
+      expect(screen.getByText(item)).toBeInTheDocument()
+    );
   });
 
   it('should render empty list', () => {
@@ -25,7 +24,9 @@ describe('OfferInside', () => {
     render(<OfferInside items={items} />);
 
     expect(screen.getByText('What\'s inside')).toBeInTheDocument();
-    expect(screen.getByText('WiFi')).toBeInTheDocument();
+    items.map((item) =>
+      expect(screen.getByText(item)).toBeInTheDocument()
+    );
   });
 });
 
