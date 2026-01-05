@@ -35,6 +35,15 @@ const OfferPage: FC = () => {
   const nearbyOffers = useMemo(() => nearbyOffersFromStore.slice(0, OFFER.NEARBY_COUNT), [nearbyOffersFromStore]);
   const mapOffers = useMemo(() => currentOffer ? [currentOffer, ...nearbyOffers] : nearbyOffers, [currentOffer, nearbyOffers]);
 
+  useEffect(() => {
+    if (!isOfferLoading || !id) {
+      return;
+    }
+    if (currentOffer && currentOffer.id === id && nearbyOffersFromStore.length > 0) {
+      setIsOfferLoading(false);
+    }
+  }, [currentOffer, id, isOfferLoading, nearbyOffersFromStore.length]);
+
   const offerImages = useMemo(() => {
     if (currentOffer?.images && currentOffer.images.length > 0) {
       return currentOffer.images;
@@ -58,29 +67,52 @@ const OfferPage: FC = () => {
 
     setIsOfferLoading(true);
 
-    dispatch(fetchOfferByIdAction(id))
-      .then((result) => {
+    (async () => {
+      try {
+        const result = await dispatch(fetchOfferByIdAction(id));
+
         if (!isMounted) {
           return;
         }
 
-        if (fetchOfferByIdAction.rejected.match(result) && result.payload === 'NOT_FOUND') {
-          navigate(AppRoute.NotFound as string, { replace: true });
-        } else {
-          dispatch(fetchNearbyOffersAction(id));
-          dispatch(fetchReviewsAction(id));
+        if (fetchOfferByIdAction.rejected.match(result)) {
+          const payload = result.payload;
+          if (payload === 'NOT_FOUND') {
+            navigate(AppRoute.NotFound as string, { replace: true });
+          }
+          if (isMounted) {
+            setIsOfferLoading(false);
+          }
+          return;
         }
-      })
-      .finally(() => {
+
+        if (fetchOfferByIdAction.fulfilled.match(result)) {
+          try {
+            await Promise.all([
+              dispatch(fetchNearbyOffersAction(id)),
+              dispatch(fetchReviewsAction(id)),
+            ]);
+          } catch {
+            // Ignore errors in nearby/reviews fetch
+          }
+
+          return;
+        }
+
         if (isMounted) {
           setIsOfferLoading(false);
         }
-      });
+      } catch {
+        if (isMounted) {
+          setIsOfferLoading(false);
+        }
+      }
+    })();
 
     return () => {
       isMounted = false;
     };
-  }, [dispatch, id, navigate]);
+  }, [id, dispatch, navigate]);
 
   const handleBookmarkClick = useCallback(() => {
     if (!isAuthorized) {
@@ -88,10 +120,12 @@ const OfferPage: FC = () => {
       return;
     }
     if (currentOffer && id) {
-      dispatch(toggleFavoriteAction({
-        offerId: id,
-        isFavorite: !currentOffer.isFavorite,
-      }));
+      requestAnimationFrame(() => {
+        dispatch(toggleFavoriteAction({
+          offerId: id,
+          isFavorite: !currentOffer.isFavorite,
+        }));
+      });
     }
   }, [isAuthorized, navigate, dispatch, currentOffer, id]);
 
@@ -104,7 +138,7 @@ const OfferPage: FC = () => {
   }
 
   return (
-    <div className="page">
+    <div className="page" data-testid="offer-page">
       <Header />
 
       <main className="page__main page__main--offer">
