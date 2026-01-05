@@ -25,10 +25,8 @@ type Particle = {
 
 const NotFoundGame: FC = () => {
   const [score, setScore] = useState<number>(NOT_FOUND_GAME.INITIAL_SCORE);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_timeLeft, setTimeLeft] = useState<number>(NOT_FOUND_GAME.GAME_DURATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_isPlaying, setIsPlaying] = useState(false);
+  const [, setTimeLeft] = useState<number>(NOT_FOUND_GAME.GAME_DURATION);
+  const [, setIsPlaying] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const particleIdRef = useRef(NOT_FOUND_GAME.INITIAL_SCORE);
@@ -129,4 +127,3 @@ const NotFoundGame: FC = () => {
 };
 
 export default NotFoundGame;
-

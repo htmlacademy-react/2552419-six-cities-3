@@ -8,7 +8,7 @@ describe('OfferGallery', () => {
     render(<OfferGallery images={images} />);
 
     const imageElements = screen.getAllByAltText('Photo studio');
-    expect(imageElements).toHaveLength(3);
+    expect(imageElements).toHaveLength(images.length);
   });
 
   it('should render maximum 6 images', () => {

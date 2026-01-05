@@ -13,14 +13,14 @@ type ReviewItemProps = {
   date: string;
 }
 
-const ReviewItem: FC<ReviewItemProps> = ({user, rating, comment, date}) => {
-  const formatDate = (dateString: string): string => {
-    const dateObj = new Date(dateString);
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'];
-    return `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-  };
+const formatDate = (dateString: string): string => {
+  const dateObj = new Date(dateString);
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+};
 
+const ReviewItem: FC<ReviewItemProps> = ({user, rating, comment, date}) => {
   const formattedDate = formatDate(date);
 
   return (

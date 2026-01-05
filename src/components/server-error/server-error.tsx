@@ -12,7 +12,5 @@ const ServerError: FC = () => (
   </div>
 );
 
-ServerError.displayName = 'ServerError';
-
 export default ServerError;
 

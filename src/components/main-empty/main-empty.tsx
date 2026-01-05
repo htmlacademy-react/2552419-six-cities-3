@@ -9,7 +9,7 @@ type MainEmptyProps = {
 }
 
 const MainEmpty: FC<MainEmptyProps> = memo(({ city, cities }) => (
-  <div className="page page--gray page--main">
+  <div className="page page--gray page--main" data-testid="main-page">
     <Header />
     <main className="page__main page__main--index page__main--index-empty">
       <h1 className="visually-hidden">Cities</h1>
