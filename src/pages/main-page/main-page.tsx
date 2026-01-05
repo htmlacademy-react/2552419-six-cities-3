@@ -55,17 +55,15 @@ const MainPage: FC = () => {
     toggleSort();
   }, [toggleSort]);
 
-  const currentSortName = useMemo(() => {
-    const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === currentSort);
-    return option?.name || 'Popular';
-  }, [currentSort]);
+  const option = DEFAULT_SORT_OPTIONS.find((opt) => opt.value === currentSort);
+  const currentSortName = option?.name || 'Popular';
 
   if (sortedOffers.length === 0) {
     return <MainEmpty city={city} cities={citiesWithActive} />;
   }
 
   return (
-    <div className="page page--gray page--main">
+    <div className="page page--gray page--main" data-testid="main-page">
       <Header />
 
       <main className="page__main page__main--index">

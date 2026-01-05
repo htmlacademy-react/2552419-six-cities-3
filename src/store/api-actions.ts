@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { Offer, AuthInfo, Review, ReviewData } from '../types/offer';
 import type { AxiosInstance } from 'axios';
 import { AxiosError } from 'axios';
-import { loadOffers, setLoading, setServerError, updateOffer, updateOfferFavorite, loadNearbyOffers } from './data-actions';
+import { loadOffers, setLoading, setServerError, updateOffer, loadNearbyOffers } from './data-actions';
 import { requireAuthorization, setUser } from './auth-actions';
 import { AuthorizationStatus } from './auth-slice';
 import { loadReviews, addReview } from './reviews-actions';
@@ -16,7 +16,7 @@ export const fetchOffersAction = createAsyncThunk<
   { extra: AxiosInstance }
 >(
   'data/fetchOffers',
-  async (_arg, { dispatch, extra: api }) => {
+  async (_arg, { dispatch, extra: api, rejectWithValue }) => {
     dispatch(setLoading(true));
     dispatch(setServerError(false));
     try {
@@ -24,20 +24,22 @@ export const fetchOffersAction = createAsyncThunk<
       const offers = data.map((item) => mapOfferServerToOffer(item));
       dispatch(loadOffers(offers));
       dispatch(setServerError(false));
+      dispatch(setLoading(false));
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
-          dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
-          dispatch(setUser(null));
-        } else if (!error.response) {
-          dispatch(setServerError(true));
-        }
-      } else {
+      if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
+        dispatch(setLoading(false));
+        dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+        dispatch(setUser(null));
+        dropToken();
+        return rejectWithValue(undefined);
+      }
+      dispatch(setLoading(false));
+      if (error instanceof AxiosError && !error.response) {
+        dispatch(setServerError(true));
+      } else if (!(error instanceof AxiosError)) {
         dispatch(setServerError(true));
       }
       throw error;
-    } finally {
-      dispatch(setLoading(false));
     }
   }
 );
@@ -66,7 +68,7 @@ export const fetchOfferByIdAction = createAsyncThunk<
 export const checkAuthAction = createAsyncThunk<
   void,
   undefined,
-  { extra: AxiosInstance; rejectValue: void }
+  { extra: AxiosInstance }
 >(
   'auth/checkAuth',
   async (_arg, { dispatch, extra: api, rejectWithValue }) => {
@@ -82,11 +84,11 @@ export const checkAuthAction = createAsyncThunk<
       if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
         dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         dropToken();
-        return rejectWithValue();
+        return rejectWithValue(undefined);
       }
       dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
       dropToken();
-      return rejectWithValue();
+      return rejectWithValue(undefined);
     }
   }
 );
@@ -212,7 +214,6 @@ export const toggleFavoriteAction = createAsyncThunk<
     const status = isFavorite ? FAVORITE_STATUS.ACTIVE : FAVORITE_STATUS.INACTIVE;
     const response = await api.post<ServerOffer>(`/favorite/${offerId}/${status}`);
     const offer = mapOfferServerToOffer(response.data);
-    dispatch(updateOfferFavorite({ id: offerId, isFavorite }));
     dispatch(updateOffer(offer));
     return offer;
   }
@@ -224,7 +225,7 @@ export const fetchFavoriteOffersAction = createAsyncThunk<
   { extra: AxiosInstance }
 >(
   'data/fetchFavoriteOffers',
-  async (_arg, { dispatch, extra: api }) => {
+  async (_arg, { dispatch, extra: api, rejectWithValue }) => {
     try {
       const { data } = await api.get<ServerOffer[]>('/favorite');
       const offers = data.map((item) => mapOfferServerToOffer(item));
@@ -235,7 +236,10 @@ export const fetchFavoriteOffersAction = createAsyncThunk<
       if (error instanceof AxiosError && error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
         dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         dispatch(setUser(null));
+        dropToken();
+        return rejectWithValue(undefined);
       }
+      throw error;
     }
   }
 );

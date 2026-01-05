@@ -81,7 +81,6 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
         onChange={handleCommentChange}
-        maxLength={MAX_COMMENT_LENGTH}
         disabled={reviewsLoading}
       />
       <div className="reviews__button-wrapper">

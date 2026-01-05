@@ -1,10 +1,11 @@
-import { FC, FormEvent, useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC, FormEvent, useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '../../components/header/header';
 import { useAppDispatch } from '../../hooks/use-redux';
 import { loginAction } from '../../store/api-actions';
 import { useAuth } from '../../hooks/use-auth';
-import { AppRoute } from '../../constants';
+import { changeCity } from '../../store/data-actions';
+import { AppRoute, CITIES } from '../../constants';
 
 const isValidPassword = (password: string): boolean => {
   const hasLetter = /[a-zA-Z]/.test(password);
@@ -19,6 +20,11 @@ const LoginPage: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const randomCity = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * CITIES.length);
+    return CITIES[randomIndex];
+  }, []);
+
   useEffect(() => {
     if (isAuthorized) {
       navigate(AppRoute.Main);
@@ -32,17 +38,21 @@ const LoginPage: FC = () => {
       return;
     }
 
-    dispatch(loginAction({ email, password })).unwrap().then(() => {
-      navigate(AppRoute.Main);
-    });
-  }, [dispatch, email, navigate, password]);
+    void dispatch(loginAction({ email, password }));
+  }, [dispatch, email, password]);
+
+  const handleRandomCityClick = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    dispatch(changeCity(randomCity));
+    navigate(AppRoute.Main);
+  }, [dispatch, navigate, randomCity]);
 
   if (isAuthorized) {
     return null;
   }
 
   return (
-    <div className="page page--gray page--login">
+    <div className="page page--gray page--login" data-testid="login-page">
       <Header />
 
       <main className="page__main page__main--login">
@@ -81,9 +91,13 @@ const LoginPage: FC = () => {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <span className="locations__item-link">
-                <span>Amsterdam</span>
-              </span>
+              <Link
+                className="locations__item-link"
+                to={AppRoute.Main}
+                onClick={handleRandomCityClick}
+              >
+                <span>{randomCity.name}</span>
+              </Link>
             </div>
           </section>
         </div>

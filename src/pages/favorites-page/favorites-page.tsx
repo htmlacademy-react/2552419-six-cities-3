@@ -29,14 +29,14 @@ const FavoritesPage: FC = () => {
     return grouped;
   }, [favoriteOffers]);
 
-  const cityNames = useMemo(() => Object.keys(offersByCity), [offersByCity]);
+  const cityNames = Object.keys(offersByCity);
 
   if (favoriteOffers.length === 0) {
     return <FavoritesEmptyPage />;
   }
 
   return (
-    <div className="page">
+    <div className="page" data-testid="favorites-page">
       <Header />
 
       <main className="page__main page__main--favorites">

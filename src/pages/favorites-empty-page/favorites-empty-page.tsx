@@ -3,7 +3,7 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 
 const FavoritesEmptyPage: FC = memo(() => (
-  <div className="page page--favorites-empty">
+  <div className="page page--favorites-empty" data-testid="favorites-page">
     <Header />
 
     <main className="page__main page__main--favorites page__main--favorites-empty">

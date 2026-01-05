@@ -35,6 +35,15 @@ const OfferPage: FC = () => {
   const nearbyOffers = useMemo(() => nearbyOffersFromStore.slice(0, OFFER.NEARBY_COUNT), [nearbyOffersFromStore]);
   const mapOffers = useMemo(() => currentOffer ? [currentOffer, ...nearbyOffers] : nearbyOffers, [currentOffer, nearbyOffers]);
 
+  useEffect(() => {
+    if (!isOfferLoading || !id) {
+      return;
+    }
+    if (currentOffer && currentOffer.id === id && nearbyOffersFromStore.length > 0) {
+      setIsOfferLoading(false);
+    }
+  }, [currentOffer, id, isOfferLoading, nearbyOffersFromStore.length]);
+
   const offerImages = useMemo(() => {
     if (currentOffer?.images && currentOffer.images.length > 0) {
       return currentOffer.images;
@@ -54,21 +63,56 @@ const OfferPage: FC = () => {
       return;
     }
 
+    let isMounted = true;
+
     setIsOfferLoading(true);
 
-    dispatch(fetchOfferByIdAction(id))
-      .then((result) => {
-        if (fetchOfferByIdAction.rejected.match(result) && result.payload === 'NOT_FOUND') {
-          navigate(AppRoute.NotFound as string, { replace: true });
-        } else {
-          dispatch(fetchNearbyOffersAction(id));
-          dispatch(fetchReviewsAction(id));
+    (async () => {
+      try {
+        const result = await dispatch(fetchOfferByIdAction(id));
+
+        if (!isMounted) {
+          return;
         }
-      })
-      .finally(() => {
-        setIsOfferLoading(false);
-      });
-  }, [dispatch, id, navigate]);
+
+        if (fetchOfferByIdAction.rejected.match(result)) {
+          const payload = result.payload;
+          if (payload === 'NOT_FOUND') {
+            navigate(AppRoute.NotFound as string, { replace: true });
+          }
+          if (isMounted) {
+            setIsOfferLoading(false);
+          }
+          return;
+        }
+
+        if (fetchOfferByIdAction.fulfilled.match(result)) {
+          try {
+            await Promise.all([
+              dispatch(fetchNearbyOffersAction(id)),
+              dispatch(fetchReviewsAction(id)),
+            ]);
+          } catch {
+            // Ignore errors in nearby/reviews fetch
+          }
+
+          return;
+        }
+
+        if (isMounted) {
+          setIsOfferLoading(false);
+        }
+      } catch {
+        if (isMounted) {
+          setIsOfferLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, dispatch, navigate]);
 
   const handleBookmarkClick = useCallback(() => {
     if (!isAuthorized) {
@@ -76,10 +120,12 @@ const OfferPage: FC = () => {
       return;
     }
     if (currentOffer && id) {
-      dispatch(toggleFavoriteAction({
-        offerId: id,
-        isFavorite: !currentOffer.isFavorite,
-      }));
+      requestAnimationFrame(() => {
+        dispatch(toggleFavoriteAction({
+          offerId: id,
+          isFavorite: !currentOffer.isFavorite,
+        }));
+      });
     }
   }, [isAuthorized, navigate, dispatch, currentOffer, id]);
 
@@ -92,7 +138,7 @@ const OfferPage: FC = () => {
   }
 
   return (
-    <div className="page">
+    <div className="page" data-testid="offer-page">
       <Header />
 
       <main className="page__main page__main--offer">
@@ -117,7 +163,7 @@ const OfferPage: FC = () => {
               {currentOffer.goods && (
                 currentOffer.goods.length > 0 && <OfferInside items={currentOffer.goods} />
               )}
-              <OfferDescription paragraphs={descriptionParagraphs} />
+              {descriptionParagraphs.length !== 0 && <OfferDescription paragraphs={descriptionParagraphs} />}
               {currentOffer.host && (
                 <OfferHost
                   name={currentOffer.host.name}

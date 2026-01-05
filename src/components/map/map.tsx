@@ -56,16 +56,17 @@ const Map: FC<MapProps> = memo(({offers, selectedOfferId, className = ''}) => {
     mapInstanceRef.current = map;
 
     return () => {
-      if (mapInstanceRef.current) {
-        try {
-          mapInstanceRef.current.remove();
-        } catch (error) {
-          void error;
-        }
-        mapInstanceRef.current = null;
-        markersRef.current = [];
-        offersRef.current = [];
+      const mapInstance = mapInstanceRef.current;
+
+      // Check if map and container exist before removal to avoid errors during cleanup
+      // if the map was already removed or DOM element is missing.
+      if (mapInstance && mapInstance.getContainer()) {
+        mapInstance.remove();
       }
+
+      mapInstanceRef.current = null;
+      markersRef.current = [];
+      offersRef.current = [];
     };
   }, [offers]);
 
@@ -109,12 +110,11 @@ const Map: FC<MapProps> = memo(({offers, selectedOfferId, className = ''}) => {
           map.setView([latitude, longitude], zoom, { animate: false });
         } catch {
           map.whenReady(() => {
-            if (mapInstanceRef.current && mapInstanceRef.current.getContainer()) {
-              try {
-                mapInstanceRef.current.setView([latitude, longitude], zoom, { animate: false });
-              } catch (error) {
-                void error;
-              }
+            const mapInstance = mapInstanceRef.current;
+            // Check if map instance and container exist before setting view to avoid errors
+            // if the map was already removed or DOM element is missing.
+            if (mapInstance && mapInstance.getContainer()) {
+              mapInstance.setView([latitude, longitude], zoom, { animate: false });
             }
           });
         }
