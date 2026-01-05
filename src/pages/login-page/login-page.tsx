@@ -26,15 +26,9 @@ const LoginPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
-    if (isAuthorized && isMounted) {
+    if (isAuthorized) {
       navigate(AppRoute.Main);
     }
-
-    return () => {
-      isMounted = false;
-    };
   }, [isAuthorized, navigate]);
 
   const handleSubmit = useCallback((evt: FormEvent<HTMLFormElement>) => {
@@ -44,11 +38,8 @@ const LoginPage: FC = () => {
       return;
     }
 
-    dispatch(loginAction({ email, password })).unwrap().then(() => {
-      navigate(AppRoute.Main);
-    }).catch(() => {
-    });
-  }, [dispatch, email, navigate, password]);
+    void dispatch(loginAction({ email, password }));
+  }, [dispatch, email, password]);
 
   const handleRandomCityClick = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
@@ -61,7 +52,7 @@ const LoginPage: FC = () => {
   }
 
   return (
-    <div className="page page--gray page--login">
+    <div className="page page--gray page--login" data-testid="login-page">
       <Header />
 
       <main className="page__main page__main--login">

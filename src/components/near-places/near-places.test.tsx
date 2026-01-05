@@ -75,9 +75,9 @@ describe('NearPlaces', () => {
       </Provider>
     );
 
-    expect(screen.getByText('Test Offer')).toBeInTheDocument();
-    expect(screen.getByText('Second Offer')).toBeInTheDocument();
-    expect(screen.getByText('Third Offer')).toBeInTheDocument();
+    offers.map((offer) =>
+      expect(screen.getByText(offer.title)).toBeInTheDocument()
+    );
   });
 
   it('should render empty list', () => {

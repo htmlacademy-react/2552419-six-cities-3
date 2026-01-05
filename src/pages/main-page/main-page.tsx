@@ -63,7 +63,7 @@ const MainPage: FC = () => {
   }
 
   return (
-    <div className="page page--gray page--main">
+    <div className="page page--gray page--main" data-testid="main-page">
       <Header />
 
       <main className="page__main page__main--index">

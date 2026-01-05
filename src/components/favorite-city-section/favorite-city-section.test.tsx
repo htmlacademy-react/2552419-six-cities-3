@@ -76,8 +76,9 @@ describe('FavoriteCitySection', () => {
     );
 
     expect(screen.getByText('Amsterdam')).toBeInTheDocument();
-    expect(screen.getByText('Test Offer')).toBeInTheDocument();
-    expect(screen.getByText('Second Offer')).toBeInTheDocument();
+    offers.map((offer) =>
+      expect(screen.getByText(offer.title)).toBeInTheDocument()
+    );
   });
 
   it('should render empty offers list', () => {

@@ -21,7 +21,7 @@ const NotFoundPage: FC = () => {
   }));
 
   return (
-    <div className="not-found-page">
+    <div className="not-found-page" data-testid="not-found-page">
       <div className="not-found-background" />
       <div className="not-found-grid" />
 

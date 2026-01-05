@@ -28,7 +28,7 @@ describe('Logo', () => {
     expect(img).toHaveAttribute('height', '50');
   });
 
-  it('should render with custom to prop', () => {
+  it('should render with custom "to" prop', () => {
     renderWithRouter(<Logo to={AppRoute.Login} />);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', AppRoute.Login);

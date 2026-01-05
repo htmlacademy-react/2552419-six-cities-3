@@ -16,8 +16,9 @@ describe('OfferHost', () => {
 
     expect(screen.getByText('Meet the host')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('First paragraph')).toBeInTheDocument();
-    expect(screen.getByText('Second paragraph')).toBeInTheDocument();
+    description.map((paragraph) =>
+      expect(screen.getByText(paragraph)).toBeInTheDocument()
+    );
   });
 
   it('should render pro badge when host is pro', () => {
@@ -61,9 +62,9 @@ describe('OfferHost', () => {
       />
     );
 
-    expect(screen.getByText('Paragraph 1')).toBeInTheDocument();
-    expect(screen.getByText('Paragraph 2')).toBeInTheDocument();
-    expect(screen.getByText('Paragraph 3')).toBeInTheDocument();
+    description.map((paragraph) =>
+      expect(screen.getByText(paragraph)).toBeInTheDocument()
+    );
   });
 });
 

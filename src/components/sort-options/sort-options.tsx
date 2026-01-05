@@ -24,7 +24,7 @@ const SortOptions: FC<SortOptionsProps> = memo(({currentSort = 'Popular', isOpen
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={onSortToggle}>
+      <span className="places__sorting-type" tabIndex={0} onClick={onSortToggle} data-testid="sorting-type">
         {currentSort}
         <svg className="places__sorting-arrow" width={ARROW_ICON.WIDTH} height={ARROW_ICON.HEIGHT}>
           <use xlinkHref="#icon-arrow-select"></use>

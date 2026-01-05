@@ -9,11 +9,20 @@ type RatingProps = {
 
 const Rating: FC<RatingProps> = memo(({rating, className = '', showValue = false}) => {
   const roundedRating = Math.round(rating);
-  const ratingPercent = roundedRating * PERCENT_PER_STAR;
+  const ratingPercent = (className.includes('reviews__rating') ? rating : roundedRating) * PERCENT_PER_STAR;
 
-  const starsClass = className.includes('place-card__rating')
-    ? 'place-card__stars rating__stars'
-    : 'rating__stars';
+  let starsClass = 'rating__stars';
+  if (className.includes('place-card__rating')) {
+    starsClass = 'place-card__stars rating__stars';
+  } else if (className.includes('offer__rating')) {
+    starsClass = 'offer__stars rating__stars';
+  } else if (className.includes('reviews__rating')) {
+    starsClass = 'reviews__stars rating__stars';
+  }
+
+  const valueClass = className.includes('offer__rating')
+    ? 'offer__rating-value rating__value'
+    : 'rating__value';
 
   return (
     <div className={`rating ${className}`}>
@@ -22,7 +31,7 @@ const Rating: FC<RatingProps> = memo(({rating, className = '', showValue = false
         <span className="visually-hidden">Rating</span>
       </div>
       {showValue && (
-        <span className="rating__value">{rating}</span>
+        <span className={valueClass}>{rating}</span>
       )}
     </div>
   );

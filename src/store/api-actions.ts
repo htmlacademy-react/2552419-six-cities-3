@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { Offer, AuthInfo, Review, ReviewData } from '../types/offer';
 import type { AxiosInstance } from 'axios';
 import { AxiosError } from 'axios';
-import { loadOffers, setLoading, setServerError, updateOffer, updateOfferFavorite, loadNearbyOffers } from './data-actions';
+import { loadOffers, setLoading, setServerError, updateOffer, loadNearbyOffers } from './data-actions';
 import { requireAuthorization, setUser } from './auth-actions';
 import { AuthorizationStatus } from './auth-slice';
 import { loadReviews, addReview } from './reviews-actions';
@@ -214,7 +214,6 @@ export const toggleFavoriteAction = createAsyncThunk<
     const status = isFavorite ? FAVORITE_STATUS.ACTIVE : FAVORITE_STATUS.INACTIVE;
     const response = await api.post<ServerOffer>(`/favorite/${offerId}/${status}`);
     const offer = mapOfferServerToOffer(response.data);
-    dispatch(updateOfferFavorite({ id: offerId, isFavorite }));
     dispatch(updateOffer(offer));
     return offer;
   }
