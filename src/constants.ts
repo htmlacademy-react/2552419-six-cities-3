@@ -57,7 +57,7 @@ const REDUX = {
 } as const;
 
 const CITY_NAME = {
-  DEFAULT_ACTIVE: 'Amsterdam',
+  DEFAULT_ACTIVE: 'Paris',
   EMPTY_PAGE_ACTIVE: 'Dusseldorf',
 } as const;
 

@@ -2,7 +2,7 @@ import { createReducer, createSelector } from '@reduxjs/toolkit';
 import type { Offer, City } from '../types/offer';
 import type { RootState } from '../hooks/use-redux';
 import { changeCity, loadOffers, updateOffer, setLoading, setServerError, updateOfferFavorite, loadNearbyOffers } from './data-actions';
-import { OFFER } from '../constants';
+import { OFFER, CITY_NAME } from '../constants';
 
 export type DataState = {
   city: City;
@@ -13,7 +13,7 @@ export type DataState = {
 }
 
 const initialState: DataState = {
-  city: { name: 'Paris' },
+  city: { name: CITY_NAME.DEFAULT_ACTIVE },
   offers: [],
   nearbyOffers: {},
   isLoading: false,
