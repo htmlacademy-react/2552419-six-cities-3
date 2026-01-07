@@ -41,6 +41,14 @@ const LoginPage: FC = () => {
     void dispatch(loginAction({ email, password }));
   }, [dispatch, email, password]);
 
+  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
+
   const handleRandomCityClick = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
     dispatch(changeCity(randomCity));
@@ -69,7 +77,7 @@ const LoginPage: FC = () => {
                   placeholder="Email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -83,7 +91,7 @@ const LoginPage: FC = () => {
                   pattern="^(?=.*[a-zA-Z])(?=.*\d).+$"
                   title="Password must contain at least one letter and one digit"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                 />
               </div>
               <button className="login__submit form__submit button" type="submit">Sign in</button>
