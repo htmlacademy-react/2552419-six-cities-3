@@ -4,7 +4,7 @@ import RatingStar from '../rating-star/rating-star';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-redux';
 import { submitReviewAction } from '../../store/api-actions';
 import { useAuth } from '../../hooks/use-auth';
-import { selectReviewsLoading } from '../../store/reviews-slice';
+import { selectReviewsLoading, selectReviewsError } from '../../store/reviews-slice';
 
 const RATING_OPTIONS = [
   { value: RATING.MAX, title: 'perfect' },
@@ -22,6 +22,7 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
   const dispatch = useAppDispatch();
   const { isAuthorized } = useAuth();
   const reviewsLoading = useAppSelector(selectReviewsLoading);
+  const reviewsError = useAppSelector(selectReviewsError);
   const [rating, setRating] = useState<string>('');
   const [comment, setComment] = useState<string>('');
 
@@ -83,6 +84,11 @@ const ReviewForm: FC<ReviewFormProps> = ({ offerId }) => {
         onChange={handleCommentChange}
         disabled={reviewsLoading}
       />
+      {reviewsError && (
+        <div className="reviews__error" style={{ color: '#ff6b6b', marginBottom: '10px', fontSize: '14px' }}>
+          Failed to submit review. Please try again.
+        </div>
+      )}
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_COMMENT_LENGTH} characters</b> and no more than <b className="reviews__text-amount">{MAX_COMMENT_LENGTH} characters</b>.
