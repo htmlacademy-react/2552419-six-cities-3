@@ -43,6 +43,16 @@ const dataReducer = createReducer(initialState, (builder) => {
           previewImage: action.payload.previewImage || action.payload.images?.[firstImageIndex],
         });
       }
+
+      Object.keys(state.nearbyOffers).forEach((offerId) => {
+        const nearbyIndex = state.nearbyOffers[offerId].findIndex((offer) => offer.id === action.payload.id);
+        if (nearbyIndex !== -1) {
+          state.nearbyOffers[offerId][nearbyIndex] = {
+            ...action.payload,
+            previewImage: state.nearbyOffers[offerId][nearbyIndex].previewImage || action.payload.previewImage || action.payload.images?.[firstImageIndex],
+          };
+        }
+      });
     })
     .addCase(setLoading, (state, action) => {
       state.isLoading = action.payload;
